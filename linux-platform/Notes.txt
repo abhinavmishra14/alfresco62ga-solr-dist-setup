@@ -1,0 +1,234 @@
+JavaInstall Dir : /usr/lib/jvm/java-11
+
+set JAVA_HOME environment variable.
+
+export JAVA_HOME=/usr/lib/jvm/java-11
+
+Install instructions: 
+https://phoenixnap.com/kb/install-java-on-centos
+
+$ sudo yum update
+$ sudo yum install java-11-openjdk-devel
+
+
+Postgres: Postgres 11.4
+
+Install instructions:
+https://computingforgeeks.com/how-to-install-postgresql-11-on-centos-7/
+https://www.symmcom.com/docs/how-tos/databases/how-to-install-postgresql-11-x-on-centos-7
+
+$ sudo yum update -y
+$ sudo reboot
+$ sudo rpm -Uvh https://yum.postgresql.org/11/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+$ sudo yum install postgresql11-server postgresql11 -y
+$ sudo rpm -qi postgresql11-server
+$ sudo /usr/pgsql-11/bin/postgresql-11-setup initdb
+
+Initializing database ... OK
+
+$ sudo systemctl enable postgresql-11.service
+$ sudo systemctl start postgresql-11.service
+
+
+$ sudo firewall-cmd --add-service=postgresql --permanent
+$ sudo firewall-cmd --reload
+
+$ sudo vim /var/lib/pgsql/11/data/postgresql.conf
+
+Add: listen_address = '*'
+
+$ sudo vim /var/lib/pgsql/11/data/pg_hba.conf
+   
+   # Accept from anywhere
+   host all all 0.0.0.0/0 md5
+
+
+$ sudo systemctl restart postgresql-11.service
+
+Prepare db:
+
+sudo su - postgres 
+
+#Set postgres user password:
+bash-4.2$ psql -c "alter user postgres with password 'postgres'"
+
+#Alfresco related
+bash-4.2$ psql -c "create role alfresco LOGIN password 'alfresco';"
+bash-4.2$ psql -c "create database alfresco encoding 'utf8';"
+bash-4.2$ psql -c "grant all on database alfresco to alfresco;"
+
+
+LINK IMagemagick: 
+NOt available for centos 7 : ImageMagick-7.0.10
+INSTALL IMagemagic dependencies: sudo yum install ImageMagick --> It will install IMagemagick 6.9
+can be also downloaded from here: https://centos.pkgs.org/7/centos-x86_64/ImageMagick-6.9.10.68-3.el7.x86_64.rpm.html
+Post installation use this command to make sure imagemagic covert command is working: 
+/usr/bin/convert test.png test.jpg
+
+img.root=/usr/lib64/ImageMagick-6.9.10
+img.dyn=/usr/bin
+img.gslib=/usr/bin
+img.exe=${img.dyn}/convert
+img.config=${img.root}/config-Q16
+img.coders=${img.root}/modules-Q16/coders
+
+with link to /usr/lib64/ImageMagick-6.9.10:
+img.root=/opt/alfresco-community62ga/imagemagick
+img.dyn=/usr/bin
+img.gslib=/usr/bin
+img.exe=${img.root}/convert
+img.config=${img.root}/ImageMagick-6.9.10/config-Q16
+img.coders=${img.root}/ImageMagick-6.9.10/modules-Q16/coders
+
+
+
+sudo ln -s /usr/lib64/ImageMagick-6.9.10 /opt/alfresco-community62ga/imagemagick
+sudo ln -s /usr/bin/convert /opt/alfresco-community62ga/imagemagick
+
+/opt/alfresco-community62ga/imagemagick/convert test.png test.jpg
+
+Make sure convert and other folder/files have appropriate permissions for tomcat user/group
+
+
+link amq: https://archive.apache.org/dist/activemq/5.15.8/apache-activemq-5.15.8-bin.tar.gz
+link tomcat: https://mirrors.gigenet.com/apache/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.tar.gz
+link libreoffice: https://downloadarchive.documentfoundation.org/libreoffice/old/6.3.5.2/rpm/x86_64/LibreOffice_6.3.5.2_Linux_x86-64_rpm.tar.gz
+
+INstall libreoffice: https://www.tecmint.com/install-libreoffice-on-rhel-centos-fedora-debian-ubuntu-linux-mint/
+sudo yum localinstall ./RPMS/*.rpm
+
+install dir bin: /usr/bin/libreoffice6.3
+install dir soffice: /opt/libreoffice6.3/program/soffice
+install dir whole: /opt/libreoffice6.3/
+sudo ln -s /opt/libreoffice6.3 /opt/alfresco-community62ga/libreoffice
+
+ooo.exe=/opt/alfresco-community62ga/libreoffice/libreoffice6.3/program/soffice.bin
+
+Make sure soffice.bin and other folder/files have appropriate permissions for tomcat user/group
+
+CReate user group tomcat:
+sudo useradd -m -U -d /opt/alfresco-community62ga -s /bin/false tomcat
+sudo useradd -m -U -d /opt/alfresco-search-services -s /bin/false solr
+
+https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-centos-7
+
+sudo vi /etc/systemd/system/tomcat.service
+
+#Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+Environment=CATALINA_PID=/opt/alfresco-community62ga/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/alfresco-community62ga/tomcat
+Environment=CATALINA_BASE=/opt/alfresco-community62ga/tomcat
+Environment='CATALINA_OPTS=-Xms1G -Xmx2G -Xss1024k -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart=/opt/alfresco-community62ga/tomcat/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+
+User=tomcat
+Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+
+
+To change group permission:
+$ chgrp group filename
+
+Provide appropriate permissions.Provide tomcat and solr group with rwx (775) permission and other as read r-- (444)
+chown user:group filename -> to provide permission to user and group at same time.
+
+
+chmod -R u=rwx .
+[root@localhost alfresco-community62ga]# chmod -R u=rwx ./*
+[root@localhost alfresco-community62ga]# chmod -R g=rwx ./*
+[root@localhost alfresco-community62ga]# chmod -R g=rwx .
+[root@localhost alfresco-community62ga]# chmod -R o=rwx ./*
+[root@localhost alfresco-community62ga]# chmod -R o=rwx .
+
+
+REfer for more details on permissions: https://www.guru99.com/file-permissions.html
+
+
+Set ALF_HOME=/opt/alfresco-community62ga
+export ALF_HOME=/opt/alfresco-community62ga
+export SOLR_HOME=/opt/alfresco-search-services
+
+also make sure $PATH varibale has entery for acs: export PATH=$PATH:/opt/alfresco-community62ga
+
+UPdate .bashrc file for setting ALF_HOME AND SOLR_HOME As env vars permanently and add them to path to allow bash shell access the shell scripts
+
+sudo vim .bashrc
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+export ALF_HOME=/opt/alfresco-community62ga
+export SOLR_HOME=/opt/alfresco-search-services
+export PATH="$PATH:$ALF_HOME:$SOLR_HOME"
+
+
+# User specific aliases and functions
+
+
+
+#CReate solr service
+
+sudo vi /etc/systemd/system/solr.service
+
+# Systemd unit file for solr6
+[Unit]
+Description=Alfresco search service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+
+ExecStart=/opt/alfresco-search-services/solr/bin/solr
+ExecStop=/bin/kill -15 $MAINPID
+
+User=solr
+Group=solr
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+
+
+
+
+
+
+#INstall multitail so we can tail multiple log files at same time:
+sudo yum install -y multitail
+
+Usage: 
+multitail /opt/alfresco-community62ga/alfresco.log /opt/alfresco-community62ga/share.log
+multitail -ci green /opt/alfresco-community62ga/alfresco.log -ci yellow -I /opt/alfresco-community62ga/share.log
+
+https://www.interserver.net/tips/kb/everything-about-linux-multitail/
+
+
