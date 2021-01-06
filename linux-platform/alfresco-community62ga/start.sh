@@ -112,11 +112,11 @@ StartSOLR() {
 	
         if [[ $INITIAL == true ]]; then
 	   printf "\nStarting solr6 with initial mode, core '$SOLR_CORES' will be created... \n"
-           #sudo -u solr $SOLR_HOME/solr/bin/solr start -a "-Dcreate.alfresco.defaults=alfresco,archive"
+           sudo -u solr $SOLR_HOME/solr/bin/solr start -a "-Dcreate.alfresco.defaults=alfresco,archive"
         else
            
            printf "\nStarting solr6... \n"
-    	   #sudo systemctl start solr.service
+    	   sudo systemctl start solr.service
 	   if [[ $? = 0 ]]
 	   then
 	     echo "solr6 service started successfully."
