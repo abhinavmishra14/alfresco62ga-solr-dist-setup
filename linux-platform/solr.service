@@ -1,0 +1,20 @@
+# Systemd unit file for solr6
+[Unit]
+Description=Alfresco search service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+
+ExecStart=/opt/alfresco-search-services/solr/bin/solr start
+ExecStop=/opt/alfresco-search-services/solr/bin/solr stop -all
+ExecStopPost=/bin/kill -15 $MAINPID
+
+User=solr
+Group=solr
+
+[Install]
+WantedBy=multi-user.target
+

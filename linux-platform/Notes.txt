@@ -107,10 +107,21 @@ ooo.exe=/opt/alfresco-community62ga/libreoffice/libreoffice6.3/program/soffice.b
 Make sure soffice.bin and other folder/files have appropriate permissions for tomcat user/group
 
 CReate user group tomcat:
-sudo useradd -m -U -d /opt/alfresco-community62ga -s /bin/false tomcat
-sudo useradd -m -U -d /opt/alfresco-search-services -s /bin/false solr
+sudo groupadd tomcat
+sudo mkdir /opt/alfresco-community62ga
+sudo useradd -s /bin/nologin -g tomcat -d /opt/alfresco-community62ga tomcat
 
-https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-centos-7
+In this fashion, you created a user "tomcat" who belongs to the group "tomcat". You cannot use this user account to log into the system. The home directory is /opt/alfresco-community62ga, which is where the Apache Tomcat program will reside.
+
+
+CReate user group solr:
+sudo groupadd solr
+sudo mkdir /opt/alfresco-search-services
+sudo useradd -s /bin/nologin -g solr -d /opt/alfresco-search-services solr
+
+In this fashion, you created a user "solr" who belongs to the group "solr". You cannot use this user account to log into the system. The home directory is /opt/alfresco-search-services, which is where the Alfresco search services will reside.
+
+https://www.vultr.com/docs/how-to-install-apache-tomcat-8-on-centos-7
 
 sudo vi /etc/systemd/system/tomcat.service
 
@@ -121,6 +132,7 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
+Restart=always
 
 Environment=JAVA_HOME=/usr/lib/jvm/jre
 Environment=CATALINA_PID=/opt/alfresco-community62ga/tomcat/temp/tomcat.pid
@@ -134,14 +146,35 @@ ExecStop=/bin/kill -15 $MAINPID
 
 User=tomcat
 Group=tomcat
-UMask=0007
-RestartSec=10
-Restart=always
 
 [Install]
 WantedBy=multi-user.target
 
 sudo systemctl daemon-reload
+
+
+Install haveged, a security-related program
+
+For security purposes, you should install haveged as well:
+
+sudo yum install haveged
+sudo systemctl start haveged.service
+sudo systemctl enable haveged.service
+
+Start and test Apache Tomcat
+
+Now, start the Apache Tomcat service and set it run on system boot:
+
+sudo systemctl start tomcat.service
+sudo systemctl enable tomcat.service
+
+In order to test Apache Tomcat in a web browser, you need to modify the firewall rules:
+
+sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+
+
+
 
 
 To change group permission:
@@ -200,25 +233,28 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
+Restart=always
 
 Environment=JAVA_HOME=/usr/lib/jvm/jre
 
-ExecStart=/opt/alfresco-search-services/solr/bin/solr
-ExecStop=/bin/kill -15 $MAINPID
+ExecStart=/opt/alfresco-search-services/solr/bin/solr start
+ExecStop=/opt/alfresco-search-services/solr/bin/solr stop -all
+ExecStopPost=/bin/kill -15 $MAINPID
 
 User=solr
 Group=solr
-UMask=0007
-RestartSec=10
-Restart=always
 
 [Install]
 WantedBy=multi-user.target
 
 sudo systemctl daemon-reload
 
+sudo systemctl start solr.service
+sudo systemctl enable solr.service
 
-
+In order to access solr6 in a web browser, you need to modify the firewall rules:
+sudo firewall-cmd --zone=public --permanent --add-port=8983/tcp
+sudo firewall-cmd --reload
 
 
 
@@ -230,5 +266,32 @@ multitail /opt/alfresco-community62ga/alfresco.log /opt/alfresco-community62ga/s
 multitail -ci green /opt/alfresco-community62ga/alfresco.log -ci yellow -I /opt/alfresco-community62ga/share.log
 
 https://www.interserver.net/tips/kb/everything-about-linux-multitail/
+
+If you see error like this in log, then either increase the resource caching or disable it.
+
+org.apache.catalina.webresources.Cache.getResource Unable to add the resource at [/WEB-INF/classes/alfresco/templates/org/alfresco/dashboard.ftl] to the cache for web application [/share] because there was insufficient free space available after evicting expired cache entries - consider increasing the maximum size of the cache
+
+By default value is 10240 kbytes, even when not added to context.xml. so either increase it:
+e.g.: <Resources cacheMaxSize="51200" />
+
+Or disable it: <Resources cachingAllowed="false" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
