@@ -50,12 +50,22 @@ Prepare db:
 sudo su - postgres 
 
 #Set postgres user password:
-bash-4.2$ psql -c "alter user postgres with password 'postgres'"
+bash-4.2$ psql
 
-#Alfresco related
-bash-4.2$ psql -c "create role alfresco LOGIN password 'alfresco';"
-bash-4.2$ psql -c "create database alfresco encoding 'utf8';"
-bash-4.2$ psql -c "grant all on database alfresco to alfresco;"
+postgres=# alter user postgres with password 'postgres';
+
+#Alfresco relate
+postgres=# create role alfresco LOGIN password 'alfresco';
+postgres=# create database alfresco encoding 'utf8';
+postgres=# grant all on database alfresco to alfresco;
+
+or
+
+sudo -u postgres createuser -D -A -P alfresco
+on promot provide the password as 'alfresco'
+
+#CReate db and assign user alfresco as owner.
+sudo -u postgres createdb -O alfresco alfresco
 
 
 LINK IMagemagick: 

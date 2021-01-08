@@ -64,7 +64,7 @@ echo "-------------------------------------------"
 
 StartDB() {
 	printf "\nStarting Postgressql... \n"
-	#sudo systemctl start postgresql-11.service
+	sudo systemctl start postgresql-11.service
 	
 	if [[ $? = 0 ]]
         then
@@ -77,7 +77,7 @@ StartDB() {
 
 StartACS() {
         printf "\nStarting Alfresco Tomcat... \n"
-	#sudo systemctl start tomcat.service
+	sudo systemctl start tomcat.service
 	
 	if [[ $? = 0 ]]
 	then
