@@ -1,0 +1,105 @@
+Setup alfresco structure under /usr/local/alfresco or /usr/local/tomcat
+
+General:
+
+dir permissions: drwxr-xr-x
+file permissions: -rw-r--r--
+
+drwxrwxr-x 1 root Alfresco  4096 Jan 13 21:30 alf_data
+drwxr-xr-x 2 root Alfresco  4096 Jan  6 08:55 alfresco-mmt
+drwxr-xr-x 1 root Alfresco  4096 Jan  6 09:00 amps
+drwxr-xr-x 1 root Alfresco  4096 Nov 10 07:08 bin
+-rw-r--r-- 1 root Alfresco 19318 Feb  5  2020 BUILDING.txt
+drwxr-xr-x 1 root Alfresco  4096 Jan  6 08:55 conf
+-rw-r--r-- 1 root Alfresco  5408 Feb  5  2020 CONTRIBUTING.md
+drwxr-xr-x 1 root Alfresco  4096 Nov 10 07:08 include
+drwxr-xr-x 1 root Alfresco  4096 Jan  6 08:55 lib
+-rw-r--r-- 1 root Alfresco 57011 Feb  5  2020 LICENSE
+drwxrwxr-x 1 root Alfresco  4096 Jan 13 21:30 logs
+drwxr-xr-x 1 root Alfresco  4096 Nov 10 07:08 native-jni-lib
+-rw-r--r-- 1 root Alfresco  1726 Feb  5  2020 NOTICE
+-rw-r--r-- 1 root Alfresco  3255 Feb  5  2020 README.md
+-rw-r--r-- 1 root Alfresco  7136 Feb  5  2020 RELEASE-NOTES
+-rw-r--r-- 1 root Alfresco 16262 Feb  5  2020 RUNNING.txt
+drwxr-xr-x 3 root Alfresco  4096 Jan  6 08:55 shared
+drwxrwxr-x 1 root Alfresco  4096 Jan 13 21:30 temp
+drwxr-x--- 1 root Alfresco  4096 Jan  6 09:00 webapps
+drwxrwxr-x 1 root Alfresco  4096 Jan 13 21:30 work
+
+alf_data:
+
+dir permissions: drwxr-x---
+
+mmt folder:
+file permissions: -rw-rw-r--
+
+bin folder:
+
+file permissions:
+
+-rw-r--r-- 1 root Alfresco  35204 Feb  5  2020 bootstrap.jar
+-rwxr-xr-x 1 root Alfresco  23802 Nov 10 07:08 catalina.sh
+-rw-r--r-- 1 root Alfresco   1664 Feb  5  2020 catalina-tasks.xml
+-rwxr-xr-x 1 root Alfresco   2007 Nov 10 07:08 ciphers.sh
+-rw-r--r-- 1 root Alfresco  25197 Feb  5  2020 commons-daemon.jar
+-rw-r--r-- 1 root Alfresco 206895 Feb  5  2020 commons-daemon-native.tar.gz
+-rwxr-xr-x 1 root Alfresco   1932 Nov 10 07:08 configtest.sh
+-rwxr-xr-x 1 root Alfresco   8685 Nov 10 07:08 daemon.sh
+-rwxr-xr-x 1 root Alfresco   1975 Nov 10 07:08 digest.sh
+-rwxr-xr-x 1 root Alfresco   3718 Nov 10 07:08 setclasspath.sh
+-rwxr-xr-x 1 root Alfresco   1912 Nov 10 07:08 shutdown.sh
+-rwxr-xr-x 1 root Alfresco   1914 Nov 10 07:08 startup.sh
+-rw-r--r-- 1 root Alfresco  49783 Feb  5  2020 tomcat-juli.jar
+-rwxr-xr-x 1 root Alfresco   5550 Nov 10 07:08 tool-wrapper.sh
+-rwxr-xr-x 1 root Alfresco   1918 Nov 10 07:08 version.sh
+
+work folder:
+drwxr-x--- 3 alfresco alfresco 4096 Jan 13 21:30 Catalina
+
+conf folder:
+
+drwxr-xr-x 3 root Alfresco   4096 Jan  6 08:55 Catalina
+-rw-r--r-- 1 root Alfresco  13684 Jan  6 08:55 catalina.policy
+-rw-r--r-- 1 root Alfresco   7692 Jan  6 08:55 catalina.properties
+-rw-r--r-- 1 root Alfresco   1338 Feb  5  2020 context.xml
+-rw-r--r-- 1 root Alfresco   1149 Feb  5  2020 jaspic-providers.xml
+-rw-r--r-- 1 root Alfresco   2313 Feb  5  2020 jaspic-providers.xsd
+-rw-r--r-- 1 root Alfresco   3916 Feb  5  2020 logging.properties
+-rw-r--r-- 1 root Alfresco   7630 Nov 10 07:08 server.xml
+-rw-r--r-- 1 root Alfresco   2164 Feb  5  2020 tomcat-users.xml
+-rw-r--r-- 1 root Alfresco   2633 Feb  5  2020 tomcat-users.xsd
+-rw-r--r-- 1 root Alfresco 172219 Nov 10 07:08 web.xml
+
+
+lib folder:
+
+-rw-r--r-- 1 root Alfresco   12373 Feb  5  2020 annotations-api.jar
+-rw-r--r-- 1 root Alfresco   54155 Feb  5  2020 catalina-ant.jar
+-rw-r--r-- 1 root Alfresco  119367 Feb  5  2020 catalina-ha.jar
+-rw-r--r-- 1 root Alfresco 1680032 Feb  5  2020 catalina.jar
+-rw-r--r-- 1 root Alfresco   77742 Feb  5  2020 catalina-storeconfig.jar
+-rw-r--r-- 1 root Alfresco  293170 Feb  5  2020 catalina-tribes.jar
+-rw-r--r-- 1 root Alfresco 2450404 Feb  5  2020 ecj-4.6.3.jar
+-rw-r--r-- 1 root Alfresco   88413 Feb  5  2020 el-api.jar
+-rw-r--r-- 1 root Alfresco  168099 Feb  5  2020 jasper-el.jar
+-rw-r--r-- 1 root Alfresco  596990 Feb  5  2020 jasper.jar
+-rw-r--r-- 1 root Alfresco   26872 Feb  5  2020 jaspic-api.jar
+-rw-r--r-- 1 root Alfresco   61655 Feb  5  2020 jsp-api.jar
+-rw-rw-r-- 1 root Alfresco 1004719 Jan  6 07:37 postgresql-42.2.18.jar
+-rw-r--r-- 1 root Alfresco  244348 Feb  5  2020 servlet-api.jar
+-rw-r--r-- 1 root Alfresco   10673 Feb  5  2020 tomcat-api.jar
+-rw-r--r-- 1 root Alfresco  855818 Feb  5  2020 tomcat-coyote.jar
+-rw-r--r-- 1 root Alfresco  280672 Feb  5  2020 tomcat-dbcp.jar
+-rw-r--r-- 1 root Alfresco   71629 Feb  5  2020 tomcat-i18n-de.jar
+-rw-r--r-- 1 root Alfresco  105304 Feb  5  2020 tomcat-i18n-es.jar
+-rw-r--r-- 1 root Alfresco  153691 Feb  5  2020 tomcat-i18n-fr.jar
+-rw-r--r-- 1 root Alfresco  172213 Feb  5  2020 tomcat-i18n-ja.jar
+-rw-r--r-- 1 root Alfresco  172041 Feb  5  2020 tomcat-i18n-ko.jar
+-rw-r--r-- 1 root Alfresco   38010 Feb  5  2020 tomcat-i18n-ru.jar
+-rw-r--r-- 1 root Alfresco  117646 Feb  5  2020 tomcat-i18n-zh-CN.jar
+-rw-r--r-- 1 root Alfresco  148604 Feb  5  2020 tomcat-jdbc.jar
+-rw-r--r-- 1 root Alfresco   34788 Feb  5  2020 tomcat-jni.jar
+-rw-r--r-- 1 root Alfresco  165156 Feb  5  2020 tomcat-util.jar
+-rw-r--r-- 1 root Alfresco  213901 Feb  5  2020 tomcat-util-scan.jar
+-rw-r--r-- 1 root Alfresco  226855 Feb  5  2020 tomcat-websocket.jar
+-rw-r--r-- 1 root Alfresco   38241 Feb  5  2020 websocket-api.jar
