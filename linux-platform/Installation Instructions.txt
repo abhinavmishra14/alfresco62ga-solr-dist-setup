@@ -1,0 +1,39 @@
+################################# Installing Java 11 [Start] ###############################
+
+	# Update packages, its a best practice to do this before installing a package
+		$ sudo yum update
+
+	# Install latest stable version of Java11
+		$ sudo yum install java-11-openjdk-devel
+
+	This will install java11 in following directory: /usr/lib/jvm/java-11
+
+	# set JAVA_HOME environment variable.
+		export JAVA_HOME=/usr/lib/jvm/java-11
+
+	Note that above environment variable gets reset after you re-start the server. To keep the variable permanent update ".bashsrc" 
+
+		$sudo vim .bashrc
+		
+		# .bashrc
+
+		# Source global definitions
+		if [ -f /etc/bashrc ]; then
+			. /etc/bashrc
+		fi
+
+		# Uncomment the following line if you don't like systemctl's auto-paging feature:
+		# export SYSTEMD_PAGER=
+		export JAVA_HOME=/usr/lib/jvm/java-11
+
+
+		# User specific aliases and functions
+
+	A good resource for installation: https://phoenixnap.com/kb/install-java-on-centos
+	
+################################# Installing Java 11 [End] #######################################
+
+################################# Installing Postgres 11.4 [Start] ###############################
+
+   A good resource for installation: https://www.symmcom.com/docs/how-tos/databases/how-to-install-postgresql-11-x-on-centos-7
+################################# Installing Postgres 11.4 [End] #################################

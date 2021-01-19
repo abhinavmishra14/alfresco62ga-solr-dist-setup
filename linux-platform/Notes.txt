@@ -1,16 +1,3 @@
-JavaInstall Dir : /usr/lib/jvm/java-11
-
-set JAVA_HOME environment variable.
-
-export JAVA_HOME=/usr/lib/jvm/java-11
-
-Install instructions: 
-https://phoenixnap.com/kb/install-java-on-centos
-
-$ sudo yum update
-$ sudo yum install java-11-openjdk-devel
-
-
 Postgres: Postgres 11.4
 
 Install instructions:
@@ -72,6 +59,11 @@ LINK IMagemagick:
 NOt available for centos 7 : ImageMagick-7.0.10
 INSTALL IMagemagic dependencies: sudo yum install ImageMagick --> It will install IMagemagick 6.9
 can be also downloaded from here: https://centos.pkgs.org/7/centos-x86_64/ImageMagick-6.9.10.68-3.el7.x86_64.rpm.html
+
+https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/7.0.10-11/imagemagick-distribution-7.0.10-11-linux.rpm
+https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/7.0.10-11/imagemagick-distribution-7.0.10-11-libs-linux.rpm
+https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
 Post installation use this command to make sure imagemagic covert command is working: 
 /usr/bin/convert test.png test.jpg
 
@@ -103,6 +95,8 @@ Make sure convert and other folder/files have appropriate permissions for tomcat
 link amq: https://archive.apache.org/dist/activemq/5.15.8/apache-activemq-5.15.8-bin.tar.gz
 link tomcat: https://mirrors.gigenet.com/apache/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.tar.gz
 link libreoffice: https://downloadarchive.documentfoundation.org/libreoffice/old/6.3.5.2/rpm/x86_64/LibreOffice_6.3.5.2_Linux_x86-64_rpm.tar.gz
+
+https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/libreoffice/libreoffice-dist/6.3.5/libreoffice-dist-6.3.5-linux.gz
 
 INstall libreoffice: https://www.tecmint.com/install-libreoffice-on-rhel-centos-fedora-debian-ubuntu-linux-mint/
 sudo yum localinstall ./RPMS/*.rpm
