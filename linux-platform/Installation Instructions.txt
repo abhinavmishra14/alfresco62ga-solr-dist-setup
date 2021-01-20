@@ -42,8 +42,6 @@
 
 
 		# User specific aliases and functions
-
-	A good resource for java installation: https://phoenixnap.com/kb/install-java-on-centos
 	
 ################################# Installing Java 11 [End] #######################################
 
@@ -89,9 +87,17 @@
         # We need to also let PostgreSQL know to accept remote connections, edit pg_hba.conf add the following:
 
         $ sudo vim /var/lib/pgsql/11/data/pg_hba.conf
-   
+
+          # TYPE  DATABASE        USER            ADDRESS                 METHOD   
           # Accept from anywhere
-          host all all 0.0.0.0/0 md5
+	  host    all             all              0.0.0.0/0              md5
+	  host    all             all              ::/0                   md5
+
+          # Comment out all other configurations that use 'ident' as method to avoid error like: FATAL:  Ident authentication failed for user "..."
+          #host    all             all             127.0.0.1/32            ident
+	  #host    all             all             ::1/128                 ident
+	  #host    replication     all             127.0.0.1/32            ident
+	  #host    replication     all             ::1/128                 ident
 
         # Restart service after making configuration changes:
 
@@ -106,7 +112,7 @@
           -bash-4.2$ psql
 
           # Run below given query to set the password.
-          postgres=# alter user postgres with password 'postgres';
+          postgres=# alter user postgres with password 'alfresco';
     
           # Type exit to terminate the terminal
           exit
@@ -236,9 +242,129 @@ SELinux gives that extra layer of security to the resources in the system. It pr
       http://localhost:80/pgadmin4/login?next=%2Fpgadmin4%2F
 
 
+ # In case you are not able to connect from pgAdmin due to SELinux preventing the connection, then exeucte following commands and restart postgresql11
+        $ sudo semanage port -a -t postgresql_port_t -p tcp 5432
+        $ sudo setsebool -P httpd_can_network_connect_db 1
+
+ 
+ # At last, prepare alfresco database, create user and assign previlidges
+       
+        $ sudo su - postgres
+	
+        # type psql to launch postgresql terminal
+        -bash-4.2$ psql
+
+   
+        #Create user named 'alfresco' and db named 'alfresco'and make 'alfresco' the owner of 'alfresco' db.
+	postgres=# create role alfresco LOGIN password 'alfresco';
+	postgres=# create database alfresco encoding 'utf8';
+	postgres=# grant all on database alfresco to alfresco;
+
+	or alternatively you can use below commands:
+
+	sudo -u postgres createuser -D -A -P alfresco
+	# on promot provide the password as 'alfresco'
+
+	#Create db and assign user alfresco as owner.
+	sudo -u postgres createdb -O alfresco alfresco
 
 
-
-
-   A good resource for installation: https://www.symmcom.com/docs/how-tos/databases/how-to-install-postgresql-11-x-on-centos-7
 ################################# Installing Postgres 11.10 [End] #################################
+
+
+################################# Installing Imagemagick 7.0.10 [Start] #################################
+
+ # Download locations:
+ # Imagemagick dist: 
+   https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/7.0.10-11/imagemagick-distribution-7.0.10-11-linux.rpm
+ # Imagemagick lib dist:
+   https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/imagemagick/imagemagick-distribution/7.0.10-11/imagemagick-distribution-7.0.10-11-libs-linux.rpm
+ # Dependencies:
+   https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+ # Download above packages and run following commands to install
+
+   # Use rpm files path as per your current download location. In my case files are downloaded in 'Downloads' folder.
+   $ sudo yum localinstall ./Downloads/*.rpm -y
+
+ # Imagemagick and its dependencies will be installed and can be found in these locations:
+
+   # Executables location:
+
+        /usr/bin/convert
+        /usr/bin/indentify
+	/usr/bin/magick
+	/usr/bin/magick-script 
+
+     etc.
+
+   # Libs location:
+   
+     /usr/lib64/ImageMagick-7.0.10
+
+
+
+   # Imagemagic configuration based on above locations for alfresco would be:
+
+        img.root=/usr/lib64/ImageMagick-7.0.10
+	img.dyn=/usr/bin
+	img.gslib=/usr/bin
+	img.exe=${img.dyn}/convert
+	img.config=${img.root}/config-Q16HDRI
+	img.coders=${img.root}/modules-Q16HDRI/coders
+
+
+  # Now that we have installed the imagemagic, let's do a round of test to make sure execuatables are working as expected
+
+    # Post installation use this command to make sure imagemagic's 'covert' command is working: 
+      
+      /usr/bin/convert test.png test.jpg
+
+
+################################# Installing Imagemagick 7.0.10 [Start] #################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
