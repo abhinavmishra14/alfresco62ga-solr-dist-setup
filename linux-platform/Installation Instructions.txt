@@ -1,17 +1,31 @@
 ################################# Installing Java 11 [Start] ###############################
 
-	# Update packages, its a best practice to do this before installing a package
-		$ sudo yum update
+	# Update packages, its a best practice to start with an updated operating system before installing a package. 
+        # If you have not done so, use the following command to update CentOS and reboot:
+		$ sudo yum update -y
+                $ sudo reboot
 
 	# Install latest stable version of Java11
 		$ sudo yum install java-11-openjdk-devel
 
 	This will install java11 in following directory: /usr/lib/jvm/java-11
 
+        # Run following command to check what is the default java version 
+               $ java -version
+
+          If you see java version other than java-11, you can switch and set the default version as java-11
+          #Run the following command:
+            $ sudo alternatives --config java
+
+            This will prompt you to select the version you want to set as default. Select a number from the list, e.g. if java-11 is at number 3, then type '3' and press enter.
+            Revalidate the java version using below command to make sure default version is set to java-11:
+            
+            $ java -version
+
 	# set JAVA_HOME environment variable.
 		export JAVA_HOME=/usr/lib/jvm/java-11
 
-	Note that above environment variable gets reset after you re-start the server. To keep the variable permanent update ".bashsrc" 
+	    Note that above environment variable gets reset after you re-start the server. To keep the variable permanent update ".bashsrc" 
 
 		$sudo vim .bashrc
 		
@@ -29,11 +43,202 @@
 
 		# User specific aliases and functions
 
-	A good resource for installation: https://phoenixnap.com/kb/install-java-on-centos
+	A good resource for java installation: https://phoenixnap.com/kb/install-java-on-centos
 	
 ################################# Installing Java 11 [End] #######################################
 
-################################# Installing Postgres 11.4 [Start] ###############################
+################################# Installing Postgres 11.10 [Start] ###############################
+
+   # Update packages, its a best practice to start with an updated operating system before installing a package. 
+   # If you have not done so, use the following command to update CentOS and reboot:
+	$ sudo yum update -y
+        $ sudo reboot
+      
+   # Configure Yum Repo
+     
+        $ sudo rpm -Uvh https://yum.postgresql.org/11/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+   
+   # Install PostgreSQL Server and Client
+
+        $ sudo yum install postgresql11-server postgresql11 -y
+
+   # Initialize Database
+
+        $ sudo /usr/pgsql-11/bin/postgresql-11-setup initdb
+
+        The default directory where PostgreSQL data storage is: /var/lib/pgsql/11/data
+
+   # Enable and Start PostgreSQL Service
+       
+        $ sudo systemctl enable postgresql-11.service
+        $ sudo systemctl start postgresql-11.service
+
+   # Configure Firewall for remote access
+
+        $ sudo firewall-cmd --add-service=postgresql --permanent
+        $ sudo firewall-cmd --reload
+
+   # Enable Remote Access so users can connect to postgresql server
+
+        # Change the listen_address to * in the configuration file:
+        
+        $ sudo vim /var/lib/pgsql/11/data/postgresql.conf
+        
+          listen_addresses = '*'
+
+        # We need to also let PostgreSQL know to accept remote connections, edit pg_hba.conf add the following:
+
+        $ sudo vim /var/lib/pgsql/11/data/pg_hba.conf
+   
+          # Accept from anywhere
+          host all all 0.0.0.0/0 md5
+
+        # Restart service after making configuration changes:
+
+        $ sudo systemctl restart postgresql-11.service
+
+
+   # Set PostgreSQL Admin Password
+        
+        $ sudo su - postgres
+	
+          # type psql to launch postgresql terminal
+          -bash-4.2$ psql
+
+          # Run below given query to set the password.
+          postgres=# alter user postgres with password 'postgres';
+    
+          # Type exit to terminate the terminal
+          exit
+
+          # Type exit to leave the bash terminal 
+          exit
+
+
+  # Install pgAdmin Tool (A management and development tool for PostgreSQL server. We will install pgadmin4)
+
+        $ sudo yum install pgadmin4 -y
+
+
+ # Start and enable httpd service to start on boot
+
+        $ sudo systemctl start httpd && sudo systemctl enable httpd
+
+        # You can confirm service status by running:
+
+        $ sudo systemctl status httpd
+ 
+
+# Enable pgAdmin Apache Configuration
+
+        $ sudo cp /etc/httpd/conf.d/pgadmin4.conf.sample /etc/httpd/conf.d/pgadmin4.conf
+
+ # Configure VirtualHost
+     
+      $ sudo vim /etc/httpd/conf.d/pgadmin4.conf
+
+      # Edit the Apache configuration file to add a VirtualHost as appears below:
+
+        <VirtualHost *:80>
+	ServerName pgadmin.alfresco.com
+	LoadModule wsgi_module modules/pgadmin4-python3-mod_wsgi.so
+	WSGIDaemonProcess pgadmin processes=1 threads=25
+	WSGIScriptAlias /pgadmin4 /usr/lib/python3.6/site-packages/pgadmin4-web/pgAdmin4.wsgi
+
+	<Directory /usr/lib/python3.6/site-packages/pgadmin4-web/>
+		WSGIProcessGroup pgadmin
+		WSGIApplicationGroup %{GLOBAL}
+		<IfModule mod_authz_core.c>
+		        # Apache 2.4
+		        Require all granted
+		</IfModule>
+		<IfModule !mod_authz_core.c>
+		        # Apache 2.2
+		        Order Deny,Allow
+		        Deny from All
+		        Allow from 127.0.0.1
+		        Allow from ::1
+		</IfModule>
+	</Directory>
+	</VirtualHost>
+
+       # Confirm the above edit and syntax are ok and then restart httpd:
+         
+          $ sudo httpd -t
+          $ sudo systemctl restart httpd
+
+
+ # Configure Data Directories
+
+     # Create data directories to be used by pgAdmin4 and provide the directories in the config file:
+      
+        $ sudo mkdir -p /var/lib/pgadmin4/ /var/log/pgadmin4/
+	$ sudo vim /usr/lib/python3.6/site-packages/pgadmin4-web/config_distro.py
+
+	        # Add the following in config_distro.py file:
+
+		LOG_FILE = '/var/log/pgadmin4/pgadmin4.log'
+		SQLITE_PATH = '/var/lib/pgadmin4/pgadmin4.db'
+		SESSION_DB_PATH = '/var/lib/pgadmin4/sessions'
+		STORAGE_DIR = '/var/lib/pgadmin4/storage'
+
+ # Run the following command to create the configuration database: 
+
+       $ sudo python3 /usr/lib/python3.6/site-packages/pgadmin4-web/setup.py 
+
+
+        Email address: admin@abhinav.com 
+	Password: <INPUT PASSWORD>
+	Retype password:<Confirm PASSWORD>
+	pgAdmin 4 - Application Initialisation
+	======================================
+
+
+ # Set permissions for pgAdmin directories to apache user
+
+      $ sudo chown -R apache:apache /var/lib/pgadmin4 /var/log/pgadmin4
+
+ # Configure SELinux (if status is Enforced/Enforcing):
+
+SELinux gives that extra layer of security to the resources in the system. It provides the MAC (mandatory access control) as contrary to the DAC (Discretionary access control).      SELinux can operate in any of the 3 modes :
+
+	1. Enforced : Actions contrary to the policy are blocked and a corresponding event is logged in the audit log.
+	2. Permissive : Permissive mode loads the SELinux software, but doesn’t enforce the rules, only logging is performed.
+	3. Disabled : The SELinux is disabled entirely.
+
+
+     # To check the status of SELinux, use following command:
+       
+        $ sudo getenforce 
+          OR
+        $ sudo sestatus
+
+     #If status says 'Enforcing', then follow the below steps for pgAdmin4:
+
+     # Create and apply a policy to allow Apache user access pgAdmin directories.
+
+	$ sudo semanage fcontext -a -t httpd_sys_rw_content_t "/var/lib/pgadmin4(/.*)?"
+	$ sudo semanage fcontext -a -t httpd_sys_rw_content_t "/var/log/pgadmin4(/.*)?"
+	$ sudo restorecon -R /var/lib/pgadmin4/
+	$ sudo restorecon -R /var/log/pgadmin4/
+
+     # Restart httpd service.
+
+        $ sudo systemctl restart httpd
+
+ # Access pgAdmin 4 Web Interface, if you have an active firewall service, allow http port
+
+	$ sudo firewall-cmd --permanent --add-service=http
+	$ sudo firewall-cmd --reload
+
+ # To launch pgadmin4 use below url (you can use server name setup as part of virtual host config above):
+
+      http://localhost:80/pgadmin4/login?next=%2Fpgadmin4%2F
+
+
+
+
+
 
    A good resource for installation: https://www.symmcom.com/docs/how-tos/databases/how-to-install-postgresql-11-x-on-centos-7
-################################# Installing Postgres 11.4 [End] #################################
+################################# Installing Postgres 11.10 [End] #################################
