@@ -326,7 +326,7 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 
 ################################# Installing Imagemagick LibreOffice_6.3.5.x [Start] #################################
 
-  # Download locations:
+    # Download locations:
    
     https://downloadarchive.documentfoundation.org/libreoffice/old/6.3.5.2/rpm/x86_64/LibreOffice_6.3.5.2_Linux_x86-64_rpm.tar.gz
     
@@ -356,6 +356,27 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 
 
 ################################# Installing Imagemagick LibreOffice_6.3.5.x [End] #################################
+
+
+################################# Installing ActiveMQ 5.15.8 [Start] #################################
+
+  # Download locations:
+  
+    https://archive.apache.org/dist/activemq/5.15.8/apache-activemq-5.15.8-bin.tar.gz
+
+
+
+
+################################# Installing ActiveMQ 5.15.8 [End] ###################################
+
+
+################################# Installing Tomcat 8.5.61 [Start] ###################################
+
+  # Download locations:
+  
+    https://mirrors.gigenet.com/apache/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.tar.gz
+
+################################# Installing Tomcat 8.5.61 [End] #####################################
 
 
 

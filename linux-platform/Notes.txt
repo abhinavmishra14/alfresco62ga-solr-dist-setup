@@ -1,25 +1,6 @@
 sudo ln -s /usr/lib64/ImageMagick-6.9.10 /opt/alfresco-community62ga/imagemagick
 sudo ln -s /usr/bin/convert /opt/alfresco-community62ga/imagemagick
-
-/opt/alfresco-community62ga/imagemagick/convert test.png test.jpg
-
-Make sure convert and other folder/files have appropriate permissions for tomcat user/group
-
-
-link amq: https://archive.apache.org/dist/activemq/5.15.8/apache-activemq-5.15.8-bin.tar.gz
-link tomcat: https://mirrors.gigenet.com/apache/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.tar.gz
-
-INstall libreoffice: https://www.tecmint.com/install-libreoffice-on-rhel-centos-fedora-debian-ubuntu-linux-mint/
-sudo yum localinstall ./RPMS/*.rpm
-
-install dir bin: /usr/bin/libreoffice6.3
-install dir soffice: /opt/libreoffice6.3/program/soffice
-install dir whole: /opt/libreoffice6.3/
 sudo ln -s /opt/libreoffice6.3 /opt/alfresco-community62ga/libreoffice
-
-ooo.exe=/opt/alfresco-community62ga/libreoffice/libreoffice6.3/program/soffice.bin
-
-Make sure soffice.bin and other folder/files have appropriate permissions for tomcat user/group
 
 CReate user group tomcat:
 sudo groupadd tomcat
