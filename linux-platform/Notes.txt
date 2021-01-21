@@ -8,9 +8,6 @@ Make sure convert and other folder/files have appropriate permissions for tomcat
 
 link amq: https://archive.apache.org/dist/activemq/5.15.8/apache-activemq-5.15.8-bin.tar.gz
 link tomcat: https://mirrors.gigenet.com/apache/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.tar.gz
-link libreoffice: https://downloadarchive.documentfoundation.org/libreoffice/old/6.3.5.2/rpm/x86_64/LibreOffice_6.3.5.2_Linux_x86-64_rpm.tar.gz
-
-https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/libreoffice/libreoffice-dist/6.3.5/libreoffice-dist-6.3.5-linux.gz
 
 INstall libreoffice: https://www.tecmint.com/install-libreoffice-on-rhel-centos-fedora-debian-ubuntu-linux-mint/
 sudo yum localinstall ./RPMS/*.rpm

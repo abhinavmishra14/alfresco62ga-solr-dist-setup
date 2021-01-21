@@ -321,18 +321,41 @@ SELinux gives that extra layer of security to the resources in the system. It pr
       /usr/bin/convert test.png test.jpg
 
 
-################################# Installing Imagemagick 7.0.10 [Start] #################################
+################################# Installing Imagemagick 7.0.10 [End] #################################
+
+
+################################# Installing Imagemagick LibreOffice_6.3.5.x [Start] #################################
+
+  # Download locations:
+   
+    https://downloadarchive.documentfoundation.org/libreoffice/old/6.3.5.2/rpm/x86_64/LibreOffice_6.3.5.2_Linux_x86-64_rpm.tar.gz
+    
+    # Can also be downloaded from here:
+    https://nexus.alfresco.com/nexus/service/local/repositories/thirdparty/content/org/libreoffice/libreoffice-dist/6.3.5/libreoffice-dist-6.3.5-linux.gz
+
+    # Download above packages and run following commands to install
+
+    # Use rpm files path as per your current download location. In my case files are downloaded in 'Downloads' folder.
+    $ sudo yum localinstall ./Downloads/LibreOffice_6.3.5.2_Linux_x86-64_rpm/RPMS/*.rpm -y
+
+    # LibreOffice and its dependencies will be installed and can be found in these locations:
+
+    /opt/libreoffice6.3
+
+    # LibreOffice configuration based on above locations for alfresco would be:
+
+        ooo.enabled=false
+	jodconverter.enabled=true
+	ooo.exe=/opt/libreoffice6.3/program/soffice.bin
+	ooo.enabled=false
+	ooo.port=8100
+	jodconverter.enabled=true
+	jodconverter.officeHome=/opt/libreoffice6.3
+	jodconverter.portNumbers=8100
 
 
 
-
-
-
-
-
-
-
-
+################################# Installing Imagemagick LibreOffice_6.3.5.x [End] #################################
 
 
 
