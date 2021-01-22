@@ -1,3 +1,33 @@
+################################# Create folder structure [Start] ################################
+
+  # Create a directory named 'alfresco-community62ga' under '/usr/local/' directory. We will setup everything here.
+    
+    $ sudo mkdir /usr/local/alfresco-community62ga
+    
+    # Create sub-directories as below:
+
+       alfresco-community62ga/
+		├── activemq
+		├── alf_data
+		│   ├── keystore
+		├── alfresco-pdf-renderer
+		├── amps
+		├── amps_share
+		├── bin
+		├── imagemagick
+		├── libreoffice
+		├── licenses
+		├── modules
+		│   ├── platform
+		│   └── share
+		└── tomcat
+		    └── shared
+			├── classes
+			└── lib
+
+
+################################# Create folder structure [End] ################################
+
 ################################# Installing Java 11 [Start] ###############################
 
 	# Update packages, its a best practice to start with an updated operating system before installing a package. 
@@ -363,6 +393,9 @@ SELinux gives that extra layer of security to the resources in the system. It pr
   # Download locations:
   
     https://archive.apache.org/dist/activemq/5.15.8/apache-activemq-5.15.8-bin.tar.gz
+
+ # (We created the directory structure in first step)
+ # Extract the package and copy content of apache-activemq-5.15.8-bin into '/usr/local/alfresco-community62ga/activemq'
 
 
 
