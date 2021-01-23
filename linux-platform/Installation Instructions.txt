@@ -374,8 +374,6 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 
     # LibreOffice configuration based on above locations for alfresco would be:
 
-        ooo.enabled=false
-	jodconverter.enabled=true
 	ooo.exe=/opt/libreoffice6.3/program/soffice.bin
 	ooo.enabled=false
 	ooo.port=8100
