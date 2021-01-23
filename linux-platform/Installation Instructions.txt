@@ -28,7 +28,21 @@
 
 ################################# Create folder structure [End] ################################
 
-################################# Installing Java 11 [Start] ###############################
+
+
+################################# Create user and group [Start] ################################
+
+  # Create a group named 'Alfresco' 
+
+  # Create a nologin user named 'alfresco'
+
+
+  # We will be using this user/group at later stages of setup to setup appropriate permission levels.
+
+################################# Create user and group [End] ##################################
+
+
+################################# Installing Java 11 [Start] ###################################
 
 	# Update packages, its a best practice to start with an updated operating system before installing a package. 
         # If you have not done so, use the following command to update CentOS and reboot:
@@ -73,7 +87,7 @@
 
 		# User specific aliases and functions
 	
-################################# Installing Java 11 [End] #######################################
+################################# Installing Java 11 [End] ########################################
 
 ################################# Installing Postgres 11.10 [Start] ###############################
 
@@ -106,13 +120,23 @@
         $ sudo firewall-cmd --add-service=postgresql --permanent
         $ sudo firewall-cmd --reload
 
-   # Enable Remote Access so users can connect to postgresql server
+   # Enable Remote Access so users can connect to postgresql server, edit 'postgresql.conf'. 
+   # Visit here for more details: https://www.postgresql.org/docs/11/runtime-config-connection.html
 
         # Change the listen_address to * in the configuration file:
         
         $ sudo vim /var/lib/pgsql/11/data/postgresql.conf
         
           listen_addresses = '*'
+
+'listen_addresses' Specifies the TCP/IP address(es) on which the server is to listen for connections from client applications. The value takes the form of a comma-separated list of host names and/or numeric IP addresses. The special entry * corresponds to all available IP interfaces. The entry 0.0.0.0 allows listening for all IPv4 addresses and :: allows listening for all IPv6 addresses. If the list is empty, the server does not listen on any IP interface at all, in which case only Unix-domain sockets can be used to connect to it. 
+          
+          # Uncomment following:
+
+          port = 5432
+
+The TCP port the server listens on; 5432 by default. Note that the same port number is used for all IP addresses the server listens on. This parameter can only be set at server start.
+
 
         # We need to also let PostgreSQL know to accept remote connections, edit pg_hba.conf add the following:
 
@@ -150,6 +174,7 @@
           # Type exit to leave the bash terminal 
           exit
 
+Note: Make sure port 5432 is open and not already in use. Port 5432 is default for postgres to get db connection. If you have this port already in use, make sure you select a different port and use the same while configuring alfresco-global.properties.
 
   # Install pgAdmin Tool (A management and development tool for PostgreSQL server. We will install pgadmin4)
 
@@ -299,7 +324,7 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 	sudo -u postgres createdb -O alfresco alfresco
 
 
-################################# Installing Postgres 11.10 [End] #################################
+################################# Installing Postgres 11.10 [End] #######################################
 
 
 ################################# Installing Imagemagick 7.0.10 [Start] #################################
@@ -332,8 +357,6 @@ SELinux gives that extra layer of security to the resources in the system. It pr
    
      /usr/lib64/ImageMagick-7.0.10
 
-
-
    # Imagemagic configuration based on above locations for alfresco would be:
 
         img.root=/usr/lib64/ImageMagick-7.0.10
@@ -351,7 +374,7 @@ SELinux gives that extra layer of security to the resources in the system. It pr
       /usr/bin/convert test.png test.jpg
 
 
-################################# Installing Imagemagick 7.0.10 [End] #################################
+################################# Installing Imagemagick 7.0.10 [End] ################################################
 
 
 ################################# Installing Imagemagick LibreOffice_6.3.5.x [Start] #################################
@@ -382,11 +405,10 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 	jodconverter.portNumbers=8100
 
 
-
 ################################# Installing Imagemagick LibreOffice_6.3.5.x [End] #################################
 
 
-################################# Installing ActiveMQ 5.15.8 [Start] #################################
+################################# Installing ActiveMQ 5.15.8 [Start] ###############################################
 
   # Download locations:
   
@@ -395,8 +417,62 @@ SELinux gives that extra layer of security to the resources in the system. It pr
  # (We created the directory structure in first step)
  # Extract the package and copy content of apache-activemq-5.15.8-bin into '/usr/local/alfresco-community62ga/activemq'
 
+Note: Make sure ports 61616, 5672, 61613, 1883, 61614 and 8161 are open and not in use already. These are default ports used for activemq. If you have these ports already in use, make sure you change the ports accordingly in <AMQ_INSTALLATION>/conf/activemq.xml and jetty.xml as needed.
+Note that activemq may not be used at this time as we will be setting up with legacy transformation service but keeping the message broker setup ready for future use in case you would like to setup transformation service. However, we will see all the steps to setup and use the activemq below, If you do these steps and not using activeMq, then disable the service and ports. Enable them back when you are ready to use transformation services.
 
+ # We will create a system service for activemq
 
+   $ sudo vim /etc/systemd/system/activemq.service
+   
+   # Put the below instructions in activemq.service and save
+
+        [Unit]
+	Description=ActiveMQ service
+	After=network.target
+
+	[Service]
+	Type=forking
+	ExecStart=/usr/local/alfresco-community62ga/activemq/bin/activemq start
+	ExecStop=/usr/local/alfresco-community62ga/activemq/bin/activemq stop
+	User=root
+	Group=root
+	Restart=always
+	RestartSec=9
+	StandardOutput=syslog
+	StandardError=syslog
+	SyslogIdentifier=activemq
+
+	[Install]
+	WantedBy=multi-user.target
+
+   # You can start ActiveMQ using:
+
+   $ sudo systemctl start activemq
+
+   # To configure ActiveMQ to automatically start at boot time, use.
+
+   $ sudo systemctl enable activemq
+
+   # To check if ActiveMQ service is started correctly, you can run the following command to check the status of the ActiveMQ service.
+
+   $ sudo systemctl status activemq
+
+   # We will open following ports: 
+     - 8161 --> for Web Console
+     - 5672 --> for AMQP
+     - 61616 --> for OpenWire
+     - 61613 --> for STOMP
+
+   $ sudo firewall-cmd --zone=public --permanent --add-port=8161/tcp
+   $ sudo firewall-cmd --zone=public --permanent --add-port=5672/tcp
+   $ sudo firewall-cmd --zone=public --permanent --add-port=61616/tcp
+   $ sudo firewall-cmd --zone=public --permanent --add-port=61613/tcp
+   $ sudo firewall-cmd --reload
+
+  # Test the web console 
+    http://localhost:8161/admin
+
+  # Now that everything setup and working, i will disable the service and disable the ports i opened above as for this setup i am not using transformation services.
 
 ################################# Installing ActiveMQ 5.15.8 [End] ###################################
 
