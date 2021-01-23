@@ -145,3 +145,48 @@ tomcat\lib folder:
 -rw-r--r-- 1 root Alfresco  213901 Feb  5  2020 tomcat-util-scan.jar
 -rw-r--r-- 1 root Alfresco  226855 Feb  5  2020 tomcat-websocket.jar
 -rw-r--r-- 1 root Alfresco   38241 Feb  5  2020 websocket-api.jar
+
+
+SOLR------------------------------------------------------------------
+
+alfresco-search-services/:
+
+drwxr-xr-x 5 solr solr 4096 Jan 23 21:02 data
+drwxr-xr-x 2 root root 4096 Dec  9 21:32 keystores
+drwxrwxr-x 3 solr solr 4096 Jan 23 21:34 logs
+-rw-rw-r-- 1 solr solr 1328 Dec  9 21:17 README.MD
+drwxr-xr-x 1 solr solr 4096 Dec  9 21:17 solr
+drwxrwxr-x 6 solr solr 4096 Jan 23 21:35 solrhome
+-rw-rw-r-- 1 solr solr 6764 Dec  9 21:17 solr.in.cmd
+-rw-rw-r-- 1 solr solr 7358 Jan 23 21:34 solr.in.sh
+
+alfresco-search-services/solrhome/:
+
+drwxr-xr-x 3 solr solr 4096 Jan 23 21:35 alfresco
+drwxr-xr-x 3 solr solr 4096 Jan 23 21:35 archive
+drwxrwxr-x 2 solr solr 4096 Jan 23 21:34 conf
+-rw-rw-r-- 1 solr solr  151 Dec  9 21:16 solr.xml
+drwxrwxr-x 4 solr solr 4096 Jan 23 21:34 templates
+
+alfresco-search-services/solr/:
+
+drwxrwxr-x 1 solr solr   4096 Dec  9 21:32 bin
+-rw-r--r-- 1 solr solr 709451 Nov 27  2019 CHANGES.txt
+drwxrwxr-x 3 solr solr   4096 Dec  9 21:17 docs
+drwxrwxr-x 2 solr solr  32768 Dec  9 21:17 licenses
+-rw-r--r-- 1 solr solr  12872 Nov 27  2019 LICENSE.txt
+-rw-r--r-- 1 solr solr 662731 Nov 27  2019 LUCENE_CHANGES.txt
+-rw-r--r-- 1 solr solr  26099 Nov 27  2019 NOTICE.txt
+-rw-r--r-- 1 solr solr   7453 Nov 27  2019 README.txt
+drwxr-xr-x 9 solr solr   4096 Dec  9 21:17 server
+
+
+alfresco-search-services/solr/bin:
+
+drwxrwxr-x 2 solr solr  4096 Dec  9 21:17 init.d
+-rwxr-xr-x 1 solr solr 12694 Nov 27  2019 install_solr_service.sh
+-rwxr-xr-x 1 solr solr  1255 Nov 27  2019 oom_solr.sh
+-rwxr-xr-x 1 solr solr  8209 Nov 27  2019 post
+-rwxrwxr-x 1 root root  4873 Dec  9 21:17 search_config_setup.sh
+-rwxr-xr-x 1 solr solr 72425 Dec  9 21:17 solr
+-rw-rw-r-- 1 solr solr 66875 Dec  9 21:17 solr.cmd
