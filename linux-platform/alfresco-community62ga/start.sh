@@ -43,7 +43,7 @@ fi
 #User need to pass this param on initial startup in order to create the cores. if core values are not passed then default 'alfresco and archive' will be used.
 SOLR_CORES=${3:-"alfresco,archive"}
 
-JAVA_OPTS="-Xms1G -Xmx2G -Xss1024k"
+JAVA_OPTS="-Xms2G -Xmx4G -Xss1024k"
 JAVA_OPTS="${JAVA_OPTS} -XX:+UseG1GC -XX:+UseStringDeduplication"
 JAVA_OPTS="${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom"
 JAVA_OPTS="${JAVA_OPTS} -Djava.io.tmpdir=${CATALINA_TMPDIR}"
@@ -125,10 +125,6 @@ StartSOLR() {
 	     exit 1
     	   fi
        fi
-}
-
-tailLogs() {
-	multitail -ci green $ALF_HOME/alfresco.log -ci yellow -I $ALF_HOME/share.log
 }
 
 ###################################

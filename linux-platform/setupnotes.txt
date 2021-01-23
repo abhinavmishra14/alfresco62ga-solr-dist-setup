@@ -5,6 +5,8 @@ General:
 dir permissions: drwxr-xr-x
 file permissions: -rw-r--r--
 
+tomcat:
+
 drwxrwxr-x 1 root Alfresco  4096 Jan 13 21:30 alf_data
 drwxr-xr-x 2 root Alfresco  4096 Jan  6 08:55 alfresco-mmt
 drwxr-xr-x 1 root Alfresco  4096 Jan  6 09:00 amps
@@ -26,16 +28,16 @@ drwxrwxr-x 1 root Alfresco  4096 Jan 13 21:30 temp
 drwxr-x--- 1 root Alfresco  4096 Jan  6 09:00 webapps
 drwxrwxr-x 1 root Alfresco  4096 Jan 13 21:30 work
 
-alf_data:
+tomcat\alf_data:
 
-dir permissions: drwxr-x---
+drwxr-x--- 3 alfresco alfresco 4096 Jan 23 21:02 contentstore
+drwxr-x--- 2 alfresco alfresco 4096 Jan 23 21:02 contentstore.deleted
 
-mmt folder:
+tomcat\alfresco-mmt folder:
+
 file permissions: -rw-rw-r--
 
-bin folder:
-
-file permissions:
+tomcat\bin folder:
 
 -rw-r--r-- 1 root Alfresco  35204 Feb  5  2020 bootstrap.jar
 -rwxr-xr-x 1 root Alfresco  23802 Nov 10 07:08 catalina.sh
@@ -53,10 +55,11 @@ file permissions:
 -rwxr-xr-x 1 root Alfresco   5550 Nov 10 07:08 tool-wrapper.sh
 -rwxr-xr-x 1 root Alfresco   1918 Nov 10 07:08 version.sh
 
-work folder:
+tomcat\work folder:
+
 drwxr-x--- 3 alfresco alfresco 4096 Jan 13 21:30 Catalina
 
-conf folder:
+tomcat\conf folder:
 
 drwxr-xr-x 3 root Alfresco   4096 Jan  6 08:55 Catalina
 -rw-r--r-- 1 root Alfresco  13684 Jan  6 08:55 catalina.policy
@@ -71,7 +74,46 @@ drwxr-xr-x 3 root Alfresco   4096 Jan  6 08:55 Catalina
 -rw-r--r-- 1 root Alfresco 172219 Nov 10 07:08 web.xml
 
 
-lib folder:
+tomcat\logs:
+
+-rw-r----- 1 alfresco alfresco   1540 Jan 23 21:35 alfresco.log
+-rw-r----- 1 alfresco alfresco  14766 Jan 23 21:35 catalina.2021-01-23.log
+-rw-r----- 1 alfresco alfresco  91433 Jan 23 21:35 custom-ports-alfresco.log
+-rw-r----- 1 alfresco alfresco      0 Jan 23 21:02 host-manager.2021-01-23.log
+-rw-r----- 1 alfresco alfresco    774 Jan 23 21:35 localhost.2021-01-23.log
+-rw-r----- 1 alfresco alfresco 516272 Jan 23 21:53 localhost_access_log.2021-01-23.txt
+-rw-r----- 1 alfresco alfresco      0 Jan 23 21:02 manager.2021-01-23.log
+
+tomcat\webapps:
+
+total 16
+drwxr-x--- 1 root Alfresco 4096 Jan 23 21:02 alfresco
+drwxr-x--- 1 root Alfresco 4096 May 13  2020 api-explorer
+drwxr-x--- 1 root Alfresco 4096 May 13  2020 ROOT
+drwxr-x--- 1 root Alfresco 4096 May 13  2020 _vti_bin
+
+
+tomcat\webapps\alfresco\WEB-INF\lib:
+
+-rw-r----- 1 root Alfresco   320871 May 13  2020 acegi-security-0.8.2_patched.jar
+-rw-r----- 1 root Alfresco    62983 May 13  2020 activation-1.1.jar
+-rw-r----- 1 root Alfresco   175344 May 13  2020 activemq-amqp-5.15.9.jar
+-rw-r----- 1 root Alfresco  1190414 May 13  2020 activemq-broker-5.15.11.jar
+-rw-r----- 1 root Alfresco    77107 May 13  2020 activemq-camel-5.15.11.jar
+-rw-r----- 1 root Alfresco  1432218 May 13  2020 activemq-client-5.15.11.jar
+-rw-r----- 1 root Alfresco    52559 May 13  2020 activemq-jms-pool-5.15.11.jar
+-rw-r----- 1 root Alfresco   685736 May 13  2020 activemq-openwire-legacy-5.15.11.jar
+-rw-r----- 1 root Alfresco    20898 May 13  2020 activemq-pool-5.15.11.jar
+-rw-r----- 1 root Alfresco   170615 May 13  2020 activemq-spring-5.15.11.jar
+-rw-r----- 1 root Alfresco   200118 May 13  2020 activiti-bpmn-converter-5.23.0.jar
+-rw-r----- 1 root Alfresco   101016 May 13  2020 activiti-bpmn-model-5.23.0.jar
+-rw-r----- 1 root Alfresco  1882457 May 13  2020 activiti-engine-5.23.0.jar
+-rw-r----- 1 root Alfresco    70784 May 13  2020 activiti-image-generator-5.23.0.jar
+-rw-r----- 1 root Alfresco    56780 May 13  2020 activiti-process-validation-5.23.0.jar
+-rw-r----- 1 root Alfresco    38489 May 13  2020 activiti-spring-5.23.0.jar
+
+
+tomcat\lib folder:
 
 -rw-r--r-- 1 root Alfresco   12373 Feb  5  2020 annotations-api.jar
 -rw-r--r-- 1 root Alfresco   54155 Feb  5  2020 catalina-ant.jar

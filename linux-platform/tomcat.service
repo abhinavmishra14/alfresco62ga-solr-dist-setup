@@ -17,8 +17,8 @@ Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./
 ExecStart=/opt/alfresco-community62ga/tomcat/bin/startup.sh
 ExecStop=/bin/kill -15 $MAINPID
 
-User=tomcat
-Group=tomcat
+User=root
+Group=Alfresco
 
 [Install]
 WantedBy=multi-user.target
