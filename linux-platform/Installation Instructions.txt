@@ -1,3 +1,37 @@
+################################# Create user and group [Start] ################################
+
+  # Create a group named 'Alfresco' 
+    
+    $ sudo groupadd Alfresco
+
+  # Create a user named 'alfresco'
+    
+    $ sudo adduser alfresco
+   
+    # Set a password or you can create a nologin user as well.
+    $ sudo passwd alfresco  
+
+    or
+
+    # System user 'alfresco'
+    $ sudo adduser alfresco --system
+
+  # Add the user 'alfresco' to the group 'Alfresco'
+ 
+    $ sudo usermod -a -G Alfresco alfresco
+
+  # Verify group membership
+   
+    $ sudo groups alfresco
+      
+      alfresco : alfresco Alfresco
+
+ 
+
+  # We will be using this user/group at later stages of setup to setup appropriate permission levels.
+
+################################# Create user and group [End] ####################################
+
 ################################# Create folder structure [Start] ################################
 
   # Create a directory named 'alfresco-community62ga' under '/usr/local/' directory. We will setup everything here.
@@ -25,22 +59,12 @@
 			├── classes
 			└── lib
 
+   # Set permissions to structure created above:
+
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga   
+
 
 ################################# Create folder structure [End] ################################
-
-
-
-################################# Create user and group [Start] ################################
-
-  # Create a group named 'Alfresco' 
-
-  # Create a nologin user named 'alfresco'
-
-
-  # We will be using this user/group at later stages of setup to setup appropriate permission levels.
-
-################################# Create user and group [End] ##################################
-
 
 ################################# Installing Java 11 [Start] ###################################
 
@@ -434,8 +458,8 @@ Note that activemq may not be used at this time as we will be setting up with le
 	Type=forking
 	ExecStart=/usr/local/alfresco-community62ga/activemq/bin/activemq start
 	ExecStop=/usr/local/alfresco-community62ga/activemq/bin/activemq stop
-	User=root
-	Group=root
+	User=alfresco
+	Group=Alfresco
 	Restart=always
 	RestartSec=9
 	StandardOutput=syslog

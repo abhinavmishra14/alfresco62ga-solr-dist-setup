@@ -8,16 +8,16 @@ Type=forking
 Restart=always
 
 Environment=JAVA_HOME=/usr/lib/jvm/jre
-Environment=CATALINA_PID=/opt/alfresco-community62ga/tomcat/temp/tomcat.pid
-Environment=CATALINA_HOME=/opt/alfresco-community62ga/tomcat
-Environment=CATALINA_BASE=/opt/alfresco-community62ga/tomcat
+Environment=CATALINA_PID=/usr/local/alfresco-community62ga/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/usr/local/alfresco-community62ga/tomcat
+Environment=CATALINA_BASE=/usr/local/alfresco-community62ga/tomcat
 Environment='CATALINA_OPTS=-Xms1G -Xmx2G -Xss1024k -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
-ExecStart=/opt/alfresco-community62ga/tomcat/bin/startup.sh
+ExecStart=/usr/local/alfresco-community62ga/tomcat/bin/startup.sh
 ExecStop=/bin/kill -15 $MAINPID
-
-User=root
+WorkingDirectory=/usr/local/alfresco-community62ga
+User=alfresco
 Group=Alfresco
 
 [Install]
