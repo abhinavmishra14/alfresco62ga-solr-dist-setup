@@ -13,7 +13,7 @@ Environment=SOLR_JAVA_MEM="-Xms1g -Xmx1g"
 ExecStart=/usr/local/alfresco-search-services/solr/bin/solr start
 ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
 ExecStopPost=/bin/kill -15 $MAINPID
-WorkingDirectory=/usr/local/alfresco-search-services
+WorkingDirectory=~/usr/local/alfresco-search-services
 User=solr
 Group=solr
 

@@ -16,7 +16,7 @@ Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./
 
 ExecStart=/usr/local/alfresco-community62ga/tomcat/bin/startup.sh
 ExecStop=/bin/kill -15 $MAINPID
-WorkingDirectory=/usr/local/alfresco-community62ga
+WorkingDirectory=~/usr/local/alfresco-community62ga
 User=alfresco
 Group=Alfresco
 

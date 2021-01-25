@@ -61,8 +61,15 @@
 
    # Set permissions to structure created above:
 
-     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga   
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga
+     
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/alf_data
+     
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/logs
 
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/work
+     
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/webapps
 
 ################################# Create folder structure [End] ################################
 
@@ -444,6 +451,7 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 Note: Make sure ports 61616, 5672, 61613, 1883, 61614 and 8161 are open and not in use already. These are default ports used for activemq. If you have these ports already in use, make sure you change the ports accordingly in <AMQ_INSTALLATION>/conf/activemq.xml and jetty.xml as needed.
 Note that activemq may not be used at this time as we will be setting up with legacy transformation service but keeping the message broker setup ready for future use in case you would like to setup transformation service. However, we will see all the steps to setup and use the activemq below, If you do these steps and not using activeMq, then disable the service and ports. Enable them back when you are ready to use transformation services.
 
+
  # We will create a system service for activemq
 
    $ sudo vim /etc/systemd/system/activemq.service
@@ -460,6 +468,7 @@ Note that activemq may not be used at this time as we will be setting up with le
 	ExecStop=/usr/local/alfresco-community62ga/activemq/bin/activemq stop
 	User=alfresco
 	Group=Alfresco
+	WorkingDirectory=~/usr/local/alfresco-community62ga/activemq/data
 	Restart=always
 	RestartSec=9
 	StandardOutput=syslog
@@ -468,6 +477,15 @@ Note that activemq may not be used at this time as we will be setting up with le
 
 	[Install]
 	WantedBy=multi-user.target
+
+
+   # Reload demons
+
+    $ sudo systemctl daemon-reload
+
+   # Change the permission for the activemq/data directory to alfresco:Alfresco (user:group)
+
+    $ sudo chown -R alfresco:Alfresco /usr/local/alfresco-community62ga/activemq/data
 
    # You can start ActiveMQ using:
 
