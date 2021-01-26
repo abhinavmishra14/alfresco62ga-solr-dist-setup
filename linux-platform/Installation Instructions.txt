@@ -99,25 +99,25 @@
 
    # Add ALF_HOME to permanent environment variable
 
-      Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bashsrc"
+      Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bash_profile"
 
-                # Edit '.bashrc' file
-		$ sudo vim .bashrc
+                # Edit '.bash_profile' file
+		$ sudo vim .bash_profile
 		
-		# .bashrc
+		# .bash_profile
 
-		# Source global definitions
-		if [ -f /etc/bashrc ]; then
-			. /etc/bashrc
+		# Get the aliases and functions
+		if [ -f ~/.bashrc ]; then
+			. ~/.bashrc
 		fi
 
-		# Uncomment the following line if you don't like systemctl's auto-paging feature:
-		# export SYSTEMD_PAGER=
+		# User specific environment and startup programs
 
 		export ALF_HOME=/usr/local/alfresco-community62ga
-		export PATH="$PATH:$ALF_HOME"
 
-		# User specific aliases and functions
+		PATH=$PATH:$HOME/.local/bin:$HOME/bin:$ALF_HOME
+
+		export PATH
               
 
 ################################# Create folder structure for ACS62-ga [End] ################################
@@ -140,26 +140,26 @@
 
    # Add SOLR_HOME to permanent environment variable
 
-      Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bashsrc" 
+      Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bash_profile" 
 
-		# Edit '.bashrc' file
-		$ sudo vim .bashrc
+		# Edit '.bash_profile' file
+		$ sudo vim .bash_profile
 		
-		# .bashrc
+		# .bash_profile
 
-		# Source global definitions
-		if [ -f /etc/bashrc ]; then
-			. /etc/bashrc
+		# Get the aliases and functions
+		if [ -f ~/.bashrc ]; then
+			. ~/.bashrc
 		fi
 
-		# Uncomment the following line if you don't like systemctl's auto-paging feature:
-		# export SYSTEMD_PAGER=
-
-		# User specific aliases and functions
+		# User specific environment and startup programs
 
 		export ALF_HOME=/usr/local/alfresco-community62ga
 		export SOLR_HOME=/usr/local/alfresco-search-services
-		export PATH="$PATH:$ALF_HOME:$SOLR_HOME"
+
+		PATH=$PATH:$HOME/.local/bin:$HOME/bin:$ALF_HOME:$SOLR_HOME
+
+		export PATH
 
 
 ################################# Create folder for alfresco-search-services [End] ##########################
@@ -192,30 +192,29 @@
 	# set JAVA_HOME environment variable.
 		export JAVA_HOME=/usr/lib/jvm/java-11
 
-	    Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bashsrc" 
+	    Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bash_profile" 
 
-                # Edit '.bashrc' file
-		$ sudo vim .bashrc
+                # Edit '.bash_profile' file
+		$ sudo vim .bash_profile
 		
-		# .bashrc
+		# .bash_profile
 
-		# Source global definitions
-		if [ -f /etc/bashrc ]; then
-			. /etc/bashrc
+		# Get the aliases and functions
+		if [ -f ~/.bashrc ]; then
+			. ~/.bashrc
 		fi
 
-		# Uncomment the following line if you don't like systemctl's auto-paging feature:
-		# export SYSTEMD_PAGER=
-
-		# User specific aliases and functions
-
+		# User specific environment and startup programs
+                
 		export JAVA_HOME=/usr/lib/jvm/java-11
 
 		export ALF_HOME=/usr/local/alfresco-community62ga
 		export SOLR_HOME=/usr/local/alfresco-search-services
-		export PATH="$PATH:$ALF_HOME:$SOLR_HOME"
 
-	
+		PATH=$PATH:$HOME/.local/bin:$HOME/bin:$ALF_HOME:$SOLR_HOME
+
+		export PATH
+
 ################################# Installing Java 11 [End] ########################################
 
 ################################# Installing Postgres 11.10 [Start] ###############################
@@ -724,8 +723,170 @@ Note that activemq may not be used at this time as we will be setting up with le
 ################################# Setup acs62-ga [Start] #############################################
 
   # We will now be setting up ACS under the directory structure we created above which is '/usr/local/alfresco-community62ga'
-
   
+  # Download ACS 6.x:
+
+    https://download.alfresco.com/cloudfront/release/community/201911-GA-build-368/alfresco-content-services-community-distribution-6.2.0-ga.zip
+ 
+  #------------------------------------------------------------- alfresco-community62ga/alf_data/keystore [Start] ----------------------------------------------------------------#
+
+  # Copy contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/alf_data/keystore” into “/usr/local/alfresco-community62ga/alf_data/keystore”
+
+      # Following files will be copied:
+
+        keystore -> Secret key keystore containing the secret key used to encrypt and decrypt node properties.  
+        keystore-passwords.properties -> Contains password protecting the keystore entries.
+
+      $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/alf_data/keystore/* /usr/local/alfresco-community62ga/alf_data/keystore/
+
+  # Copy contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/keystore” into “/usr/local/alfresco-community62ga/alf_data/keystore”
+
+      # Following files will be copied:
+
+        CreateSSLKeystores.txt -> Contains instructions to create an RSA public/private key pair for the repository with a certificate that has been signed by the Alfresco Certificate Authority (CA).
+        readme.txt -> Text file containing information about other files in a directory.
+        generate_keystores.sh -> Shell script file for generating secure keys for SOLR communication.
+
+Note: These files will be used to setup Data Encryption (not supported on community version) and SSL for SOLR and Alfresco communication (we are not setting up SSL here so we are just copying the files but we will not be using it for now)
+
+      $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/keystore/* /usr/local/alfresco-community62ga/alf_data/keystore/
+
+  # Update the file permissions for '/usr/local/alfresco-community62ga/alf_data/keystore' directory:
+
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/alf_data/keystore
+
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga/alf_data/keystore
+
+  #------------------------------------------------------------- alfresco-community62ga/alf_data/keystore [End] ----------------------------------------------------------------#
+
+  #------------------------------------------------------------- alfresco-community62ga/alfresco-pdf-renderer [Start] ----------------------------------------------------------#
+
+  # Extract “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/alfresco-pdf-renderer/alfresco-pdf-renderer-1.1-linux.tgz"
+  # Copy the file "/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/alfresco-pdf-renderer/alfresco-pdf-renderer" into “/usr/local/alfresco-community62ga/alfresco-pdf-renderer”
+    
+     $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/alfresco-pdf-renderer/alfresco-pdf-renderer /usr/local/alfresco-community62ga/alfresco-pdf-renderer/
+
+    # You would have following file in “/usr/local/alfresco-community62ga/alfresco-pdf-renderer” directory:
+
+        alfresco-pdf-renderer [Full path: /usr/local/alfresco-community62ga/alfresco-pdf-renderer/alfresco-pdf-renderer]
+
+    # Update the file permissions for '/usr/local/alfresco-community62ga/alfresco-pdf-renderer' directory:
+
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/alfresco-pdf-renderer
+
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga/alfresco-pdf-renderer
+
+  #------------------------------------------------------------- alfresco-community62ga/alfresco-pdf-renderer [End] ----------------------------------------------------------#
+
+  #------------------------------------------------------------- alfresco-community62ga/amps [Start] -------------------------------------------------------------------------#
+
+  # Copy contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/amps” into “/usr/local/alfresco-community62ga/amps”. We will be installing  alfresco module packages (amps) at later stage.
+
+    $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/amps/alfresco-share-services.amp /usr/local/alfresco-community62ga/amps/
+
+    # Following files will be copied:
+
+        alfresco-share-services.amp -> Alfresco share service module containing extensions for search, datalist, sample sites patch etc.
+
+Note: This amp installation is mandatory otherwise several functionalities including share search may not work. And you will also see following warning when you login to share: Alfresco is running without Share Services. See your System Administrator for more details.
+  
+   # Update the file permissions for '/usr/local/alfresco-community62ga/amps' directory:
+
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/amps
+
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga/amps
+
+  #------------------------------------------------------------- alfresco-community62ga/amps [End] --------------------------------------------------------------------------#
+
+  #------------------------------------------------------------- alfresco-community62ga/bin [Start] --------------------------------------------------------------------------#
+
+   # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/bin” into “/usr/local/alfresco-community62ga/bin” folder
+
+        # Following files will be copied:
+
+        alfresco-mmt.jar -> Alfresco Module Management Tool (MMT), A java library which supports alfresco module package installation/uninstallation/listing and preview operations etc.
+        apply_amps.sh -> Utility to install amps kept in “amps” and “amps_share” directory. It will install amps related to alfresco on alfresco.war (keeps the backup of original war file) and amps related to share on share.war (keeps the backup of original war file) For more details visit: https://docs.alfresco.com/community/tasks/amp-install.html
+        clean_tomcat.sh -> Windows batch file for cleaning out temporary application server files from previous installations.
+   
+        $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/bin/alfresco-mmt.jar /usr/local/alfresco-community62ga/bin/
+        $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/bin/apply_amps.sh /usr/local/alfresco-community62ga/bin/
+        $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/bin/clean_tomcat.sh /usr/local/alfresco-community62ga/bin/
+
+    # Update the file permissions for '/usr/local/alfresco-community62ga/bin' directory:
+
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/bin
+
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga/bin
+
+  #------------------------------------------------------------- alfresco-community62ga/bin [End] ----------------------------------------------------------------------------#
+
+  #------------------------------------------------------------- alfresco-community62ga/licenses [Start] ---------------------------------------------------------------------#
+
+   # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/licenses” into “/usr/local/alfresco-community62ga/licenses” folder. It contains files that have information about license terms used by alfresco including all third party licenses.
+
+     $ sudo cp -R /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/licenses/* /usr/local/alfresco-community62ga/licenses/
+
+    # Update the file permissions for '/usr/local/alfresco-community62ga/licenses' directory:
+
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/licenses
+
+  #------------------------------------------------------------- alfresco-community62ga/licenses [End] -----------------------------------------------------------------------#
+
+
+  #---------------------------------------------------- Create link to imagemagick executables and lib [Start] ---------------------------------------------------------------#
+
+    # Executables location that will be used for acs:
+
+       /usr/bin/convert
+
+    # Libs location used for acs:
+   
+       /usr/lib64/ImageMagick-7.0.10
+
+    $ sudo ln -s /usr/bin/convert /usr/local/alfresco-community62ga/imagemagick
+    $ sudo ln -s /usr/lib64/ImageMagick-7.0.10/config-Q16HDRI /usr/local/alfresco-community62ga/imagemagick
+    $ sudo ln -s /usr/lib64/ImageMagick-7.0.10/modules-Q16HDRI /usr/local/alfresco-community62ga/imagemagick
+
+
+    # Imagemagic configuration based on above locations for alfresco would be:
+
+        img.root=/usr/local/alfresco-community62ga/imagemagick
+	img.exe=${img.root}/convert
+	img.config=${img.root}/config-Q16HDRI
+	img.coders=${img.root}/modules-Q16HDRI/coders
+        img.dyn=/usr/bin
+	img.gslib=/usr/bin
+
+  #---------------------------------------------------- Create link to imagemagick executables and lib [End] -----------------------------------------------------------------#
+
+  #---------------------------------------------------- Create link to libreoffice executables and lib [Start] ---------------------------------------------------------------#
+
+    # LibreOffice and its dependencies were installed at this location:
+
+      /opt/libreoffice6.3
+
+    # Create link to all files/directories from '/opt/libreoffice6.3' to '/usr/local/alfresco-community62ga/libreoffice':
+ 
+    $ sudo ln -s /opt/libreoffice6.3/* /usr/local/alfresco-community62ga/libreoffice
+
+    # LibreOffice configuration based on above locations for alfresco would be:
+
+	ooo.exe=/usr/local/alfresco-community62ga/libreoffice/program/soffice.bin
+	ooo.enabled=false
+	ooo.port=8100
+	jodconverter.enabled=true
+	jodconverter.officeHome=/usr/local/alfresco-community62ga/libreoffice
+	jodconverter.portNumbers=8100
+
+  #---------------------------------------------------- Create link to libreoffice executables and lib [End] -----------------------------------------------------------------#
+
+  #----------------------------------------------------  alfresco-community62ga/tomcat [Start] -------------------------------------------------------------------------------#
+
+    # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/conf” into “/usr/local/alfresco-community62ga/tomcat/conf” folder. conf directory contains Catalina repository and Share xml files.
+   
+    
+
+  #----------------------------------------------------  alfresco-community62ga/tomcat [End] ---------------------------------------------------------------------------------#
 
 ################################# Setup acs62-ga [End] ###############################################
 
