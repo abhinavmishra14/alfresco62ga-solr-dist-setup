@@ -15,7 +15,7 @@ ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
 ExecStopPost=/bin/kill -15 $MAINPID
 WorkingDirectory=~/usr/local/alfresco-search-services
 User=solr
-Group=solr
+Group=Solr
 
 [Install]
 WantedBy=multi-user.target

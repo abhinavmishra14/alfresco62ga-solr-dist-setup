@@ -1,5 +1,6 @@
-################################# Create user and group [Start] ################################
+################################# Create users and groups [Start] ###########################################
 
+  ##### User and Group for ACS #####
   # Create a group named 'Alfresco' 
     
     $ sudo groupadd Alfresco
@@ -26,13 +27,40 @@
       
       alfresco : alfresco Alfresco
 
+  
+  ##### User and Group for Alfresco search services #####
+  # Create a group named 'Solr' 
+    
+    $ sudo groupadd Solr
+
+  # Create a user named 'solr'
+    
+    $ sudo adduser solr
+   
+    # Set a password or you can create a nologin user as well.
+    $ sudo passwd solr  
+
+    or
+
+    # System user 'solr'
+    $ sudo adduser solr --system
+
+  # Add the user 'solr' to the group 'Slr'
  
+    $ sudo usermod -a -G Solr solr
 
-  # We will be using this user/group at later stages of setup to setup appropriate permission levels.
+  # Verify group membership
+   
+    $ sudo groups solr
+      
+      solr : solr Solr
 
-################################# Create user and group [End] ####################################
 
-################################# Create folder structure [Start] ################################
+  # We will be using this user/group at later stages of setup to setup appropriate permission levels for ACS and Solr.
+
+################################# Create user and group [End] #################################################
+
+################################# Create folder structure for ACS62-ga [Start] ################################
 
   # Create a directory named 'alfresco-community62ga' under '/usr/local/' directory. We will setup everything here.
     
@@ -59,7 +87,7 @@
 			├── classes
 			└── lib
 
-   # Set permissions to structure created above:
+   # Set initial permissions to structure created above:
 
      $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga
      
@@ -67,11 +95,77 @@
 
      $ sudo chmod -R 775 /usr/local/alfresco-community62ga/alf_data
 
-    # We will be setting up some more permissions when we setup tomcat.
+     # We will be setting up some more permissions when we setup tomcat.
 
-################################# Create folder structure [End] ################################
+   # Add ALF_HOME to permanent environment variable
 
-################################# Installing Java 11 [Start] ###################################
+      Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bashsrc"
+
+                # Edit '.bashrc' file
+		$ sudo vim .bashrc
+		
+		# .bashrc
+
+		# Source global definitions
+		if [ -f /etc/bashrc ]; then
+			. /etc/bashrc
+		fi
+
+		# Uncomment the following line if you don't like systemctl's auto-paging feature:
+		# export SYSTEMD_PAGER=
+
+		export ALF_HOME=/usr/local/alfresco-community62ga
+		export PATH="$PATH:$ALF_HOME"
+
+		# User specific aliases and functions
+              
+
+################################# Create folder structure for ACS62-ga [End] ################################
+
+
+################################# Create folder for alfresco-search-services [Start] ########################
+
+    # Create a directory named 'alfresco-search-services' under '/usr/local/' directory. We will setup everything here.
+    
+    $ sudo mkdir /usr/local/alfresco-search-services
+
+    # Set initial permissions to structure created folder:
+
+     $ sudo chgrp -R Solr /usr/local/alfresco-search-services
+     
+     $ sudo chmod -R 755 /usr/local/alfresco-search-services
+     
+     # We will be setting up some more permissions when we setup solr.
+
+
+   # Add SOLR_HOME to permanent environment variable
+
+      Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bashsrc" 
+
+		# Edit '.bashrc' file
+		$ sudo vim .bashrc
+		
+		# .bashrc
+
+		# Source global definitions
+		if [ -f /etc/bashrc ]; then
+			. /etc/bashrc
+		fi
+
+		# Uncomment the following line if you don't like systemctl's auto-paging feature:
+		# export SYSTEMD_PAGER=
+
+		# User specific aliases and functions
+
+		export ALF_HOME=/usr/local/alfresco-community62ga
+		export SOLR_HOME=/usr/local/alfresco-search-services
+		export PATH="$PATH:$ALF_HOME:$SOLR_HOME"
+
+
+################################# Create folder for alfresco-search-services [End] ##########################
+
+
+################################# Installing Java 11 [Start] ################################################
 
 	# Update packages, its a best practice to start with an updated operating system before installing a package. 
         # If you have not done so, use the following command to update CentOS and reboot:
@@ -98,9 +192,10 @@
 	# set JAVA_HOME environment variable.
 		export JAVA_HOME=/usr/lib/jvm/java-11
 
-	    Note that above environment variable gets reset after you re-start the server. To keep the variable permanent update ".bashsrc" 
+	    Note that above environment variable gets reset after you re-start the server. To keep the variable permanent edit/update ".bashsrc" 
 
-		$sudo vim .bashrc
+                # Edit '.bashrc' file
+		$ sudo vim .bashrc
 		
 		# .bashrc
 
@@ -111,10 +206,15 @@
 
 		# Uncomment the following line if you don't like systemctl's auto-paging feature:
 		# export SYSTEMD_PAGER=
-		export JAVA_HOME=/usr/lib/jvm/java-11
-
 
 		# User specific aliases and functions
+
+		export JAVA_HOME=/usr/lib/jvm/java-11
+
+		export ALF_HOME=/usr/local/alfresco-community62ga
+		export SOLR_HOME=/usr/local/alfresco-search-services
+		export PATH="$PATH:$ALF_HOME:$SOLR_HOME"
+
 	
 ################################# Installing Java 11 [End] ########################################
 
@@ -619,6 +719,15 @@ Note that activemq may not be used at this time as we will be setting up with le
    $ sudo firewall-cmd --reload
 
 ################################# Installing Tomcat 8.5.61 [End] #####################################
+
+
+################################# Setup acs62-ga [Start] #############################################
+
+  # We will now be setting up ACS under the directory structure we created above which is '/usr/local/alfresco-community62ga'
+
+  
+
+################################# Setup acs62-ga [End] ###############################################
 
 
 
