@@ -11,7 +11,7 @@ Environment=JAVA_HOME=/usr/lib/jvm/jre
 Environment=CATALINA_PID=/usr/local/alfresco-community62ga/tomcat/temp/tomcat.pid
 Environment=CATALINA_HOME=/usr/local/alfresco-community62ga/tomcat
 Environment=CATALINA_BASE=/usr/local/alfresco-community62ga/tomcat
-Environment='CATALINA_OPTS=-Xms1G -Xmx2G -Xss1024k -server -XX:+UseParallelGC'
+Environment='CATALINA_OPTS=-Xms3G -Xmx4G -Xss1024k -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
 ExecStart=/usr/local/alfresco-community62ga/tomcat/bin/startup.sh
