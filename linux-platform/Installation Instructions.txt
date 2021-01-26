@@ -63,13 +63,11 @@
 
      $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga
      
-     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/alf_data
-     
-     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/logs
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga
 
-     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/work
-     
-     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/webapps
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/alf_data
+
+    # We will be setting up some more permissions when we setup tomcat.
 
 ################################# Create folder structure [End] ################################
 
@@ -484,7 +482,7 @@ Note that activemq may not be used at this time as we will be setting up with le
     $ sudo systemctl daemon-reload
 
    # Change the permission for the activemq/data directory to alfresco:Alfresco (user:group)
-
+    $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/activemq
     $ sudo chown -R alfresco:Alfresco /usr/local/alfresco-community62ga/activemq/data
 
    # You can start ActiveMQ using:
@@ -514,6 +512,18 @@ Note that activemq may not be used at this time as we will be setting up with le
   # Test the web console 
     http://localhost:8161/admin
 
+    # If you see '503' status code and page doesn't show up then this could due to SELinux or Permission issues. Run following command to allow SELinux pass the request on 8161 port and fix permissions:
+ 
+    $ sudo semanage port -a -t http_port_t -p tcp 8161
+   
+    # One of the directory created by activemq at run time may be causing permission issues, so we will create it and put appropriate permissions for the safe side:
+    $ sudo mkdir /usr/local/alfresco-community62ga/activemq/tmp
+    $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/activemq/tmp
+    $ sudo chmod -R 775 /usr/local/alfresco-community62ga/activemq/tmp
+
+    # Try the webconsole again, this should work this time hopefully:
+      http://localhost:8161/admin
+    
   # Now that everything setup and working, i will disable the service and disable the ports i opened above as for this setup i am not using transformation services.
 
 ################################# Installing ActiveMQ 5.15.8 [End] ###################################
@@ -524,6 +534,89 @@ Note that activemq may not be used at this time as we will be setting up with le
   # Download locations:
   
     https://mirrors.gigenet.com/apache/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.tar.gz
+
+  # (We created the directory structure in first step)
+  # Extract the package and copy content of apache-tomcat-8.5.61 into '/usr/local/alfresco-community62ga/tomcat'
+
+  # Note: Make sure ports 8005, 8080, 8443, AJP port 8009 are open and not in use already. These are default ports used for tomcat. If you have these ports already in use, make sure you change the ports accordingly in <TOMCAT_INSTALLATION>/conf/server.xml.
+
+  # Update permissions:
+
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/tomcat
+     
+     $ sudo chmod -R 644 /usr/local/alfresco-community62ga/tomcat/*
+     
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga/tomcat/bin
+     
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga/tomcat/conf
+  
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga/tomcat/shared
+
+     $ sudo chmod -R 755 /usr/local/alfresco-community62ga/tomcat/lib
+
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/temp
+     
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/logs
+
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/work
+     
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/webapps
+  
+
+  # We will create a system service for tomcat
+   
+    $ sudo vim /etc/systemd/system/tomcat.service
+   
+     # Put the below instructions in tomcat.service and save
+
+        #Systemd unit file for tomcat
+	[Unit]
+	Description=Apache Tomcat Web Application Container
+	After=syslog.target network.target
+
+	[Service]
+	Type=forking
+	Restart=always
+
+	Environment=JAVA_HOME=/usr/lib/jvm/jre
+	Environment=CATALINA_PID=/usr/local/alfresco-community62ga/tomcat/temp/tomcat.pid
+	Environment=CATALINA_HOME=/usr/local/alfresco-community62ga/tomcat
+	Environment=CATALINA_BASE=/usr/local/alfresco-community62ga/tomcat
+	Environment='CATALINA_OPTS=-Xms3G -Xmx4G -Xss1024k -server -XX:+UseParallelGC'
+	Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+	ExecStart=/usr/local/alfresco-community62ga/tomcat/bin/startup.sh
+	ExecStop=/bin/kill -15 $MAINPID
+	WorkingDirectory=~/usr/local/alfresco-community62ga/tomcat
+	User=alfresco
+	Group=Alfresco
+
+	[Install]
+	WantedBy=multi-user.target
+
+
+     # Reload demons
+
+     $ sudo systemctl daemon-reload
+
+   # You can start Tomcat using:
+
+   $ sudo systemctl start tomcat
+
+   # To configure Tomcat to automatically start at boot time, use.
+
+   $ sudo systemctl enable tomcat
+
+   # To check if Tomcat service is started correctly, you can run the following command to check the status of the Tomcat service.
+
+   $ sudo systemctl status tomcat
+
+   # We will open following ports: 
+     - 8080 --> for alfresco and share access.
+
+   $ sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
+   $ sudo firewall-cmd --zone=public --permanent --add-port=8443/tcp
+   $ sudo firewall-cmd --reload
 
 ################################# Installing Tomcat 8.5.61 [End] #####################################
 
