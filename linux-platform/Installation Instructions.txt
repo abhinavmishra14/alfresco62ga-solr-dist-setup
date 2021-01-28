@@ -884,9 +884,306 @@ Note: This amp installation is mandatory otherwise several functionalities inclu
 
     # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/conf” into “/usr/local/alfresco-community62ga/tomcat/conf” folder. conf directory contains Catalina repository and Share xml files.
    
+    $ sudo cp -R /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/conf /usr/local/alfresco-community62ga/tomcat/conf
+
+    # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/lib/” into “/usr/local/alfresco-community62ga/tomcat/lib/” folder. 'lib' directory contains the PostgreSQL JDBC jar file (postgresql-42.2.6.jar).
+   
+    $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/lib/* /usr/local/alfresco-community62ga/tomcat/lib/
+
     
+    # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/shared/classes” into “/usr/local/alfresco-community62ga/tomcat/shared/classes/” folder. shared directory includes the Alfresco Content Services configuration files:
+
+        /classes/alfresco-global.properties.sample -> Sample alfresco global properties file, which is used for configuration properties.
+        /classes/alfresco -> Contains the directory structure for the configuration override files, including the extension, and web-extension directories.
+
+     $ sudo cp -R /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/shared/classes /usr/local/alfresco-community62ga/tomcat/shared/classes/
+
+    # Update the file permissions for '/usr/local/alfresco-community62ga/tomcat/shared' directory:
+
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/tomcat/shared
+
+
+    # Delete all files/folders from “/usr/local/alfresco-community62ga/tomcat/webapps”
+
+     $ sudo rm -rf /usr/local/alfresco-community62ga/tomcat/webapps/*
+
+    # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/webapps” into “/usr/local/alfresco-community62ga/tomcat/webapps/” folder.
+
+        # Following files will be copied:
+
+        alfresco.war -> Alfresco repository web application.
+        share.war -> Share interface web application.
+        ROOT.war -> Application for the server root, also contains additional code/setup for handling alfresco office services module (alfresco-office-services). Alfresco Office Services (AOS) allow you to access Alfresco Content Services directly from all your Microsoft Office applications. We will not be installing this module since SSL is a mandatory enablement for this module.
+        _vti_bin.war -> App to help and support AOS module.   
+
+      
+       $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/webapps/*.war /usr/local/alfresco-community62ga/tomcat/webapps/
+
+     
+      # Update the file permissions for '/usr/local/alfresco-community62ga/tomcat/webapps/' directory:
+
+        $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/tomcat/webapps/
+
+        $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/webapps/*.war
+
+
+   # Delete all files/folders from “/usr/local/alfresco-community62ga/tomcat/work/Catalina/localhost” if there are any.
+
+     $ sudo rm -rf /usr/local/alfresco-community62ga/tomcat/work/Catalina/localhost/*
+
+     # Update the file permissions for '/usr/local/alfresco-community62ga/tomcat/work/Catalina/localhost' directory:
+
+        $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/tomcat/work/Catalina/localhost
+
+        $ sudo chmod -R 775 /usr/local/alfresco-community62ga/tomcat/work/Catalina/localhost
+     
+   # Open and  Edit server.xml file which can be found under: “/usr/local/alfresco-community62ga/tomcat/conf/” directory [Full path: /usr/local/alfresco-community62ga/tomcat/conf
+/server.xml] and update following:
+
+     # Find Connector with port "8080”.	Add the URIEncoding and maxHttpHeaderSize attributes.
+
+	<Connector port="8080" protocol="HTTP/1.1"
+	 URIEncoding="UTF-8" connectionTimeout="20000"
+	 maxHttpHeaderSize="32768"
+	 redirectPort="8443" />
+
+    # Tomcat uses ISO-8859-1 character encoding when decoding URLs that are received from a browser. This can cause problems when creating, uploading, and renaming files with international characters. By default, Tomcat uses an 8 KB header buffer size, which might not be large enough for the Kerberos authentication protocol. We need to increase this buffer size.         
+
+   # Update AJP Connector config you are planning to use it. By default it is commented in tomcat server.xml, make sure you add URIEncoding attribute to the config if you are planning to use it. This port is used when configuring external authentication. 
+
+	# See here for more details: 
+
+        https://docs.alfresco.com/community/concepts/auth-basics.html
+
+	<Connector port="8009" URIEncoding="UTF-8" protocol="AJP/1.3" redirectPort="8443" />
+
+
+    # Open and Edit the /usr/local/alfresco-community62ga/tomcat/conf/catalina.properties file and update following:
+
+        # Change the value of the shared.loader= property to the following:
+
+	shared.loader=${catalina.base}/shared/classes,${catalina.base}/shared/lib/*.jar
+
+
+	Note: If you have used alternative names for the directories, you must specify these names in the shared.loader property.
+
+    #  If you see any warning in logs such as "org.apache.catalina.webresources.Cache.getResource Unable to add the resource at [/WEB-INF/classes/alfresco/templates/org/alfresco/dashboard.ftl] to the cache for web application [/share] because there was insufficient free space available after evicting expired cache entries - consider increasing the maximum size of the cache" or "org.apache.catalina.webresources.Cache.backgroundProcess The background cache eviction process was unable to free [10] percent of the cache for Context [/share] - consider increasing the maximum size of the cache. After eviction approximately [9,411] KB of data remained in the cache." then you can increase the resource case of disable resource caching. Follow the below given steps if you see these warnings:
+
+   # By default value for resource caching is 10240 kbytes, even when not added to /usr/local/alfresco-community62ga/tomcat/conf/tomcat/conf/context.xml. So either increase it until you stop seeing the warning or disable it completely:
+
+     # Edit /usr/local/alfresco-community62ga/tomcat/conf/context.xml
+
+	<Resources cacheMaxSize="51200" cachingAllowed="true"/>
+
+	Or disable it: 
+
+	<Resources cachingAllowed="false" />
+
 
   #----------------------------------------------------  alfresco-community62ga/tomcat [End] ---------------------------------------------------------------------------------#
+
+  #----------------------------------------------------  alfresco-community62ga repository config [Start] --------------------------------------------------------------------#
+
+    # Rename “/usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties.sample” to “alfresco-global.properties”
+  
+    $ sudo mv /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties.sample /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties
+    
+      # Update the file permissions for '/usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties' file:
+
+        $ sudo chgrp Alfresco /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties
+
+    # Updated '/usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties' file for repository related configurations such as dir.root, imagemagick, libreoffice, db jdbc properties, etc. Refer below properties and update:
+
+      $ sudo vim /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties
+        
+        #---------------------------------------------------------------------------------------------------------------
+
+        ###############################
+	## Common Alfresco Properties #
+	###############################
+
+
+	dir.root=/usr/local/alfresco-community62ga/alf_data
+	dir.contentstore=${dir.root}/contentstore
+	dir.contentstore.deleted=${dir.root}/contentstore.deleted
+	dir.keystore=${dir.root}/keystore
+
+	#
+	# URL Generation Parameters (The ${localname} token is replaced by the local server name)
+	#-------------
+	alfresco.context=alfresco
+	alfresco.host=${localname}
+	alfresco.port=8080
+	alfresco.protocol=http
+	share.context=share
+	share.host=${localname}
+	share.port=8080
+	share.protocol=http
+
+	### database connection properties ###
+	db.driver=org.postgresql.Driver
+	db.username=alfresco
+	db.password=alfresco
+	db.name=alfresco
+	db.url=jdbc:postgresql://localhost:5432/${db.name}
+	# Note: your database must also be able to accept at least this many connections.  Please see your database documentation for instructions on how to configure this.
+	db.pool.max=275
+	db.pool.validate.query=SELECT 1
+
+	# The server mode. Set value here
+	# UNKNOWN | TEST | BACKUP | PRODUCTION
+	system.serverMode=UNKNOWN
+
+	### RMI registry port for JMX ###
+	alfresco.rmi.services.port=50500
+
+	# Default value of alfresco.rmi.services.host is 0.0.0.0 which means 'listen on all adapters'.
+	# This allows connections to JMX both remotely and locally.
+	alfresco.rmi.services.host=0.0.0.0
+
+	#
+	#
+	# Assign individual ports for each service for best performance 
+	# or run several services on the same port. You can even run everything on 50500 if needed.
+	# Select 0 to use a random unused port.
+	#monitor.rmi.service.port=50508
+
+
+	### External executable locations ###
+
+	#PDF Renderer config, used for previewing pdf docs.
+	alfresco-pdf-renderer.root=/usr/local/alfresco-community62ga/alfresco-pdf-renderer
+	alfresco-pdf-renderer.exe=${alfresco-pdf-renderer.root}/alfresco-pdf-renderer
+
+	#Imagemagick config without folder links and with actual install location
+	#img.root=/usr/lib64/ImageMagick-7.0.10
+	#img.dyn=/usr/bin
+	#img.gslib=/usr/bin
+	#img.exe=${img.dyn}/convert
+	#img.config=${img.root}/config-Q16HDRI
+	#img.coders=${img.root}/modules-Q16HDRI/coders
+
+	#Imagemagick config with folder links to actual install location
+	img.root=/usr/local/alfresco-community62ga/imagemagick
+	img.exe=${img.root}/convert
+	img.config=${img.root}/config-Q16HDRI
+	img.coders=${img.root}/modules-Q16HDRI/coders
+	img.dyn=/usr/bin
+	img.gslib=/usr/bin
+
+	####LibreOffice and jodconverter configurations
+	#You can transform a document from one format to another using the OOoJodconverter subsystem. This feature requires you to install LibreOffice.
+	#The Jodconverter integration is a library that improves the stability and performance of LibreOffice in Alfresco Content Services. 
+	#The Jodconverter runs on the same machine as the Alfresco Content Services server and it supports:
+	#	- a pool of separate LibreOffice processes
+	#	- automatic restart of crashed LibreOffice processes
+	#	- automatic termination of slow LibreOffice operations
+	#	- automatic restart of any LibreOffice process after a number of operations (this is a workaround for LibreOffice memory leaks)
+
+	#OOoDirect
+	#The subsystem for direct OpenOffice integration, in which the Alfresco server manages OpenOffice directly. To enable or disable this subsystem, use the following property:
+	#ooo.enabled=false
+	#Note:
+	#If you install Alfresco manually, by default, the OOoDirect subsystem is enabled, and the OOoJodconverter subsystem is disabled. 
+	#Although it is possible to run both subsystems, Alfresco recommends that you enable only one at a time. 
+	#To take advantage of the stability and performance benefits of the OOoJodconverter subsystem, 
+	#ensure that you disable OOoDirect and enable OOoJodConverter using the following properties in the alfresco-global.properties file: ooo.enabled=false
+	#jodconverter.enabled=true
+
+
+	#libreoffice config without folder links and with actual install location
+	#ooo.exe=/opt/libreoffice6.3/program/soffice.bin
+	#ooo.enabled=false
+	#ooo.port=8100
+	#jodconverter.enabled=true
+	#jodconverter.officeHome=/opt/libreoffice6.3
+	#jodconverter.portNumbers=8100
+
+	#libreoffice config with folder links to actual install location
+	ooo.exe=/usr/local/alfresco-community62ga/libreoffice/program/soffice.bin
+	ooo.enabled=false
+	ooo.port=8100
+	jodconverter.enabled=true
+	jodconverter.officeHome=/usr/local/alfresco-community62ga/libreoffice
+	jodconverter.portNumbers=8100
+
+
+	### E-mail site invitation setting ###
+	notification.email.siteinvite=false
+
+	### License location ###
+	dir.license.external=/usr/local/alfresco-community62ga
+
+	#Confiure ActiveMQ URL. 
+	messaging.broker.url=\"failover:(nio://localhost:61616)?timeout=3000&jms.useCompression=true\"
+	messaging.subsystem.autoStart=false
+
+	#Transform service configurations
+	transform.service.enabled=false
+	local.transform.service.enabled=false
+	legacy.transform.service.enabled=true
+
+	### Allow extended ResultSet processing
+	security.anyDenyDenies=false
+
+	### Smart Folders Config Properties ###
+	smart.folders.enabled=false
+
+	### Remote JMX (Default: disabled) ###
+	alfresco.jmx.connector.enabled=false
+
+	################ Solr Search service configurations ###############
+
+	#
+	# Index Recovery Mode
+	#-------------
+	#index.recovery.mode=AUTO
+
+	# Set this property unless you have explicitly chosen to expose some repository APIs without authentication
+	solr.host=localhost
+	solr.port=8983
+	#none, https
+	solr.secureComms=none
+	solr.base.url=/solr
+	index.subsystem.name=solr6
+
+
+	### FTP Server Configuration ###
+	ftp.port=2121
+	ftp.enabled=true
+	ftp.server.enables=true
+
+        #----------------------------------------------------------------------------------------------------------------------
+
+     # Apply amps to alfresco.war and share.war.
+
+       # Mandatory Amps:
+
+          “alfresco-share-services.amp” amp is mandatory for alfresco.war
+
+    Note: This amp installation is mandatory otherwise several functionalities including share search may not work. And you will also see following warning when you login to share: Alfresco is running without Share Services. See your System Administrator for more details
+
+       # Optional Amps: As part of this installation, we will be installing some optional amps which will be useful for admins/developers that can help in debugging and administration.
+
+            support-tools-repo-1.1.0.0-amp.amp -> A module that provides utilities for developers and administrators via alfresco admin console. Download the amp from here:
+
+https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-repo/1.1.0.0/support-tools-repo-1.1.0.0-amp.amp, and copy in “/usr/local/alfresco-community62ga/amps” folder.
+
+            support-tools-share-1.1.0.0-amp.amp -> A module that provides utilities for developers and administrators via share admin console. Download the amp from here: https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-share/1.1.0.0/support-tools-share-1.1.0.0-amp.amp, and copy in “/usr/local/alfresco-community62ga/amps_share” folder.
+
+            For more details visit: 
+
+            https://github.com/OrderOfTheBee/ootbee-support-tools 
+
+            javascript-console-repo-0.6.amp -> A module that provides ability for developers and administrators to execute JavaScript code. It is repository layer dependency for share amp. Download the amp from here: https://repo1.maven.org/maven2/de/fmaul/javascript-console-repo/0.6/javascript-console-repo-0.6.amp, and copy in “/usr/local/alfresco-community62ga/amps” folder.
+
+            javascript-console-share-0.6.amp -> A module that provides ability for developers and administrators to execute JavaScript code. Download the amp from here: https://repo1.maven.org/maven2/de/fmaul/javascript-console-share/0.6/javascript-console-share-0.6.amp, and copy in “/usr/local/alfresco-community62ga/amps_share” folder.
+
+            For more details visit:
+
+            https://github.com/share-extras/js-console
+
+  #----------------------------------------------------  alfresco-community62ga repository config [End] ----------------------------------------------------------------------#
 
 ################################# Setup acs62-ga [End] ###############################################
 
