@@ -1472,6 +1472,43 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 ################################# Setup alfresco-search-services [End] #################################################
 
 
+################################# Fix known user searchissue with share [Start] ########################################
+
+  # There is a known issue with share where user search doesn't work. For more details visit: https://github.com/Alfresco/acs-community-packaging/issues/36
+
+  # To fix the issue we have to update /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco/web-extension
+/share-config-custom.xml
+
+    # Find the <show-authorization-status>true</show-authorization-status> tag and change the value to 'false', in the config having condition as "users".
+    
+      i.e. <show-authorization-status>false</show-authorization-status>
+ 
+      #Fix for Admin tools user search issue (https://github.com/Alfresco/acs-community-packaging/issues/367)
+
+      $ sudo sed -i 's@<show-authorization-status>true</show-authorization-status>@<show-authorization-status>false</show-authorization-status>@' \
+	/usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml
+
+    # If the config not present and you can't find the '<show-authorization-status>' element then add the following config and keep the value for '<show-authorization-status>'
+      as 'false'.
+
+      $ sudo vim /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml 
+
+      <config evaluator="string-compare" condition="Users">
+        <users>
+            <!-- minimum length for username and password -->
+            <username-min-length>2</username-min-length>
+            <password-min-length>3</password-min-length>
+            <!-- Default value is 'true', setting it to 'false' to fix the user search issue.
+            <show-authorization-status>false</show-authorization-status>
+        </users>
+        <!-- This enables/disables the Add External Users Panel on the Add Users page. -->
+        <enable-external-users-panel>false</enable-external-users-panel>
+    </config>
+
+
+    # You can find the above config here : https://github.com/Alfresco/share/blob/develop/share/src/main/resources/alfresco/share-config.xml#L127
+
+################################# Fix known user searchissue with share [End] ##########################################
 
 
 
