@@ -1433,7 +1433,6 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
 	ExecStart=/usr/local/alfresco-search-services/solr/bin/solr start
 	ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
-	WorkingDirectory=~/usr/local/alfresco-search-services/solrhome
 
 	User=solr
 	Group=Solr
