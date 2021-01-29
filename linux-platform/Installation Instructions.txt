@@ -669,29 +669,29 @@ Note that activemq may not be used at this time as we will be setting up with le
      # Put the below instructions in tomcat.service and save
 
         #Systemd unit file for tomcat
-	[Unit]
-	Description=Apache Tomcat Web Application Container
-	After=syslog.target network.target
+		[Unit]
+		Description=Apache Tomcat Web Application Container
+		After=syslog.target network.target
 
-	[Service]
-	Type=forking
-	Restart=always
+		[Service]
+		Type=forking
+		Restart=always
 
-	Environment=JAVA_HOME=/usr/lib/jvm/jre
-	Environment=CATALINA_PID=/usr/local/alfresco-community62ga/tomcat/temp/tomcat.pid
-	Environment=CATALINA_HOME=/usr/local/alfresco-community62ga/tomcat
-	Environment=CATALINA_BASE=/usr/local/alfresco-community62ga/tomcat
-	Environment='CATALINA_OPTS=-Xms3G -Xmx4G -Xss1024k -server -XX:+UseParallelGC'
-	Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+		Environment=JAVA_HOME=/usr/lib/jvm/jre
+		Environment=CATALINA_PID=/usr/local/alfresco-community62ga/tomcat/temp/tomcat.pid
+		Environment=CATALINA_HOME=/usr/local/alfresco-community62ga/tomcat
+		Environment=CATALINA_BASE=/usr/local/alfresco-community62ga/tomcat
+		Environment='CATALINA_OPTS=-Xms3G -Xmx4G -Xss1024k -server -XX:+UseParallelGC'
+		Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
-	ExecStart=/usr/local/alfresco-community62ga/tomcat/bin/startup.sh
-	ExecStop=/bin/kill -15 $MAINPID
-	WorkingDirectory=~/usr/local/alfresco-community62ga/tomcat
-	User=alfresco
-	Group=Alfresco
+		ExecStart=/usr/local/alfresco-community62ga/tomcat/bin/startup.sh
+		ExecStop=/bin/kill -15 $MAINPID
+		WorkingDirectory=~/usr/local/alfresco-community62ga/tomcat
+		User=alfresco
+		Group=Alfresco
 
-	[Install]
-	WantedBy=multi-user.target
+		[Install]
+		WantedBy=multi-user.target
 
 
      # Reload demons
@@ -851,11 +851,11 @@ Note: This amp installation is mandatory otherwise several functionalities inclu
     # Imagemagic configuration based on above locations for alfresco would be:
 
         img.root=/usr/local/alfresco-community62ga/imagemagick
-	img.exe=${img.root}/convert
-	img.config=${img.root}/config-Q16HDRI
-	img.coders=${img.root}/modules-Q16HDRI/coders
+		img.exe=${img.root}/convert
+		img.config=${img.root}/config-Q16HDRI
+		img.coders=${img.root}/modules-Q16HDRI/coders
         img.dyn=/usr/bin
-	img.gslib=/usr/bin
+		img.gslib=/usr/bin
 
   #---------------------------------------------------- Create link to imagemagick executables and lib [End] -----------------------------------------------------------------#
 
@@ -871,12 +871,12 @@ Note: This amp installation is mandatory otherwise several functionalities inclu
 
     # LibreOffice configuration based on above locations for alfresco would be:
 
-	ooo.exe=/usr/local/alfresco-community62ga/libreoffice/program/soffice.bin
-	ooo.enabled=false
-	ooo.port=8100
-	jodconverter.enabled=true
-	jodconverter.officeHome=/usr/local/alfresco-community62ga/libreoffice
-	jodconverter.portNumbers=8100
+		ooo.exe=/usr/local/alfresco-community62ga/libreoffice/program/soffice.bin
+		ooo.enabled=false
+		ooo.port=8100
+		jodconverter.enabled=true
+		jodconverter.officeHome=/usr/local/alfresco-community62ga/libreoffice
+		jodconverter.portNumbers=8100
 
   #---------------------------------------------------- Create link to libreoffice executables and lib [End] -----------------------------------------------------------------#
 
@@ -1359,41 +1359,92 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
 	# For all the externalized search service configurations (environment variables), visit: https://docs.alfresco.com/search-community/concepts/external-properties-solr.html 
 
-	# Starting and stopping solr6 (aka alfresco search service) instructions.
+	# Starting and stopping solr6 (aka alfresco search service) instructions:
 	
-	# Starting Solr6: 
-	
-		./solr/bin/solr start -a "-Dcreate.alfresco.defaults=alfresco,archive"
-	
-	The command line param, -a passes additional JVM parameters, e.g., system properties using -D.
+		# Starting Solr6: 
+		
+			./solr/bin/solr start -a "-Dcreate.alfresco.defaults=alfresco,archive"
+		
+		The command line param, -a passes additional JVM parameters, e.g., system properties using -D.
 
-	Note that, -Dcreate.alfresco.defaults=alfresco,archive command automatically creates the alfresco and archive cores. So you need to pass this param only on first/initial startup of solr in order to allow cores being created and configured.
+		Note that, -Dcreate.alfresco.defaults=alfresco,archive command automatically creates the alfresco and archive cores. So you need to pass this param only on first/initial startup of solr in order to allow cores being created and configured.
 
-	Once Search Services is up and running, you should see a message similar to the following:
+		Once Search Services is up and running, you should see a message similar to the following:
 
-	# Startup message: 
-	
-		Waiting up to 180 seconds to see Solr running on port 8983 [\]  
-		Started Solr server on port 8983 (pid=443218). Happy searching!
-	
-	# Stopping Solr6:
-	
-		./solr/bin/solr stop -p 8983
+		# Startup message: 
+		
+			Waiting up to 180 seconds to see Solr running on port 8983 [\]  
+			Started Solr server on port 8983 (pid=443218). Happy searching!
+		
+		# Stopping Solr6:
+		
+			./solr/bin/solr stop -p 8983
 
-		Or
+			Or
 
-		./solr/bin/solr stop -all
-	
-	# Configure solr log, The logs are stored in the /usr/local/alfresco-search-services/logs/solr.log file, by default. This can be configured in solr.in.cmd using SOLR_LOGS_DIR. This is optional setup. We are keeping default settings
-	
-	SOLR_LOGS_DIR=../../logs
-	LOG4J_PROPS=$SOLR_LOGS_DIR/log4j.properties
-	
-	# Verify the SOLR Admin UI. Use the URL below to launch SOLR Admin UI and validate the status and cores:
-	http://localhost:8983/solr 
-	http://localhost:8983/solr/#/alfresco --> To check alfresco core status
+			./solr/bin/solr stop -all
+		
+		# Configure solr log, The logs are stored in the /usr/local/alfresco-search-services/logs/solr.log file, by default. This can be configured in solr.in.cmd using SOLR_LOGS_DIR. This is optional setup. We are keeping default settings
+		
+		SOLR_LOGS_DIR=../../logs
+		LOG4J_PROPS=$SOLR_LOGS_DIR/log4j.properties
+		
+    # We will create a system service for solr
+   
+      $ sudo vim /etc/systemd/system/solr.service
+   
+      # Put the below instructions in solr.service and save
+
+        # Systemd unit file for solr6
+		[Unit]
+		Description=Alfresco search service
+		After=syslog.target network.target
+
+		[Service]
+		Type=forking
+		Restart=always
+
+		Environment=JAVA_HOME=/usr/lib/jvm/jre
+		Environment=SOLR_JAVA_MEM="-Xms2g -Xmx2g"
+
+		ExecStart=/usr/local/alfresco-search-services/solr/bin/solr start
+		ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
+		ExecStopPost=/bin/kill -15 $MAINPID
+		WorkingDirectory=~/usr/local/alfresco-search-services
+		
+		User=solr
+		Group=Solr
+
+		[Install]
+		WantedBy=multi-user.target
 
 
+      # Reload demons
+
+        $ sudo systemctl daemon-reload
+
+   # You can start SOLR using:
+
+	 $ sudo systemctl start solr
+
+   # To configure SOLR to automatically start at boot time, use.
+
+     $ sudo systemctl enable solr
+
+   # To check if SOLR service is started correctly, you can run the following command to check the status of the SOLR service.
+
+     $ sudo systemctl status solr
+
+   # We will open following ports: 
+     - 8983 --> for alfresco and share access.
+
+     $ sudo firewall-cmd --zone=public --permanent --add-port=8983/tcp
+     $ sudo firewall-cmd --reload
+	
+  
+   # Verify the SOLR Admin UI. Use the URL below to launch SOLR Admin UI and validate the status and cores:
+		http://localhost:8983/solr 
+		http://localhost:8983/solr/#/alfresco --> To check alfresco core status
 
 
 ################################# Setup alfresco-search-services [End] #################################################
