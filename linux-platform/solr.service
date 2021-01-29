@@ -8,16 +8,13 @@ Type=forking
 Restart=always
 
 Environment=JAVA_HOME=/usr/lib/jvm/jre
-Environment=SOLR_JAVA_MEM="-Xms2g -Xmx2g"
 
 ExecStart=/usr/local/alfresco-search-services/solr/bin/solr start
 ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
-ExecStopPost=/bin/kill -15 $MAINPID
-WorkingDirectory=~/usr/local/alfresco-search-services
+WorkingDirectory=~/usr/local/alfresco-search-services/solrhome
 
 User=solr
 Group=Solr
 
 [Install]
 WantedBy=multi-user.target
-

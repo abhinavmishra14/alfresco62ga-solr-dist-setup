@@ -1305,7 +1305,22 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
     # Unzip the “alfresco-search-services-1.4.0.zip” package which we downloaded initially.
     # Copy the extracted folder “alfresco-search-services” to “/usr/local/alfresco-search-services/”
+
+      $ sudo cp -R /home/centos/Downloads/alfresco-search-services /usr/local/alfresco-search-services/
+
+    # Update the permissions, we will use the user and group that we created initially for search services:
+     
+      	     $ sudo chown -R solr:Solr /usr/local/alfresco-search-services/
+	     
+	     $ sudo chmod -R 755 /usr/local/alfresco-search-services/
+
+	     $ sudo chmod -R 775 /usr/local/alfresco-search-services/logs
+
+             $ sudo chmod -R 775 /usr/local/alfresco-search-services/solrhome
+
     # Open “/usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties” and add the following configuration properties:
+      
+      $  sudo vim /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco-global.properties
 
 		solr.host=localhost
 		solr.port=8983
@@ -1315,7 +1330,9 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
     Note: We are setting up solr6 without SSL, hence using non SSL port and setting secureComms property as none. 
 
-    # We are enabling the multi language search support, Its optional if you wish to enable it. By default it is disabled. Open “/usr/local/alfresco-search-services/solrhome/conf/shared.properties” and update following:
+    # We are enabling the multi language search support, Its optional if you wish to enable it. By default it is disabled. Open and edit “/usr/local/alfresco-search-services/solrhome/conf/shared.properties” and update following:
+     
+     $ sudo vim /usr/local/alfresco-search-services/solrhome/conf/shared.properties
 
 	alfresco.cross.locale.datatype.0={http://www.alfresco.org/model/dictionary/1.0}text
 	alfresco.cross.locale.datatype.1={http://www.alfresco.org/model/dictionary/1.0}content
@@ -1323,7 +1340,7 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
       # I would recommend enabling these settings, as there seems to an ongoing java heap space issue if these properties are disabled. For more info see below issues:
       
-      	https://github.com/Alfresco/SearchServices/issues/233
+      	        https://github.com/Alfresco/SearchServices/issues/233
 
 		https://github.com/Alfresco/SearchServices/issues/233#issuecomment-626145052
 
@@ -1331,10 +1348,11 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
 		https://github.com/Alfresco/SearchServices/issues/234#issuecomment-699843033
 
-   # We are enabling search suggestions for some properties, it is disabled by default. This feature is optional if you wish to enable it. You can also add additional properties down the line. Open “/usr/local/alfresco-search-services/solrhome/conf/shared.properties” and update following:
+   # We are enabling search suggestions for some properties, it is disabled by default. This feature is optional if you wish to enable it. You can also add additional properties down the line. Open and edit “/usr/local/alfresco-search-services/solrhome/conf/shared.properties” and update following:
+
+     $ sudo vim /usr/local/alfresco-search-services/solrhome/conf/shared.properties
 
 	alfresco.suggestable.property.0={http://www.alfresco.org/model/content/1.0}name
-
 	alfresco.suggestable.property.1={http://www.alfresco.org/model/content/1.0}title 
 	alfresco.suggestable.property.2={http://www.alfresco.org/model/content/1.0}description 
 	alfresco.suggestable.property.3={http://www.alfresco.org/model/content/1.0}content
@@ -1343,7 +1361,9 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
 
   # If you would setup search services on a different or remote machine, you would need to set the SOLR_SOLR_HOST, SOLR_SOLR_PORT, SOLR_SOLR_BASEURL, SOLR_ALFRESCO_HOST, SOLR_ALFRESCO_PORT and SOLR_ALFRESCO_BASEURL environment variables. This is optional but we will keep the mapping for future reference.
-  # We are setting up without SSL, so set this variable SOLR_ALFRESCO_SECURECOMMS to none. It is mandatory as default value is https. Open “/usr/local/alfresco-search-services/solr.in.sh” file and add following at the end of the file:
+  # We are setting up without SSL, so set this variable SOLR_ALFRESCO_SECURECOMMS to none. It is mandatory as default value is https. Open and edit “/usr/local/alfresco-search-services/solr.in.sh” file and add following at the end of the file:
+
+   $ sudo vim /usr/local/alfresco-search-services/solr.in.sh
 	
 	SOLR_SOLR_HOST=localhost
 	SOLR_SOLR_PORT=8983
@@ -1355,7 +1375,12 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 	:: Since we are setting up with no SSL, this property need to be set to none. Default is https
 	SOLR_ALFRESCO_SECURECOMMS=none
 	
-	# Alternatively you can set the properties in “/usr/local/alfresco-search-services/solrhome/templates/rerank/conf/solrcore.properties” file as well before cores are created. If you have both alfresco and archive cores already created use the environment variable based approach.
+	# Alternatively you can set the properties in “/usr/local/alfresco-search-services/solrhome/templates/rerank/conf/solrcore.properties” file as well before cores are created. 
+          If you have both alfresco and archive cores already created use the environment variable based approach.
+
+          e.g. $ sudo vim /usr/local/alfresco-search-services/solrhome/templates/rerank/conf/solrcore.properties
+               
+               alfresco.secureComms=none
 
 	# For all the externalized search service configurations (environment variables), visit: https://docs.alfresco.com/search-community/concepts/external-properties-solr.html 
 
@@ -1396,27 +1421,25 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
       # Put the below instructions in solr.service and save
 
         # Systemd unit file for solr6
-		[Unit]
-		Description=Alfresco search service
-		After=syslog.target network.target
+	[Unit]
+	Description=Alfresco search service
+	After=syslog.target network.target
 
-		[Service]
-		Type=forking
-		Restart=always
+	[Service]
+	Type=forking
+	Restart=always
 
-		Environment=JAVA_HOME=/usr/lib/jvm/jre
-		Environment=SOLR_JAVA_MEM="-Xms2g -Xmx2g"
+	Environment=JAVA_HOME=/usr/lib/jvm/jre
 
-		ExecStart=/usr/local/alfresco-search-services/solr/bin/solr start
-		ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
-		ExecStopPost=/bin/kill -15 $MAINPID
-		WorkingDirectory=~/usr/local/alfresco-search-services
-		
-		User=solr
-		Group=Solr
+	ExecStart=/usr/local/alfresco-search-services/solr/bin/solr start
+	ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
+	WorkingDirectory=~/usr/local/alfresco-search-services/solrhome
 
-		[Install]
-		WantedBy=multi-user.target
+	User=solr
+	Group=Solr
+
+	[Install]
+	WantedBy=multi-user.target
 
 
       # Reload demons
@@ -1425,7 +1448,7 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
    # You can start SOLR using:
 
-	 $ sudo systemctl start solr
+     $ sudo systemctl start solr
 
    # To configure SOLR to automatically start at boot time, use.
 
