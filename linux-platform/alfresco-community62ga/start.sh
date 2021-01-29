@@ -7,10 +7,10 @@
 
 printf "\n------------------------------ Starting services ------------------------- \n"
 
-#User can pass ALF_HOME path. Defaults to "/opt/alfresco-community62ga".
-export ALF_HOME=${1:-"/opt/alfresco-community62ga"}
-#User can pass SOLR_HOME path. Defaults to "/opt/alfresco-search-services".
-export SOLR_HOME=${2:-"/opt/alfresco-search-services"}
+#User can pass ALF_HOME path. Defaults to "/usr/local/alfresco-community62ga".
+export ALF_HOME=${1:-"/usr/local/alfresco-community62ga"}
+#User can pass SOLR_HOME path. Defaults to "/usr/local/alfresco-search-services".
+export SOLR_HOME=${2:-"/usr/local/alfresco-search-services"}
 
 export CATALINA_HOME=$ALF_HOME/tomcat
 export CATALINA_TMPDIR=$CATALINA_HOME/temp
@@ -77,7 +77,7 @@ StartDB() {
 
 StartACS() {
         printf "\nStarting Alfresco Tomcat... \n"
-	sudo systemctl start tomcat.service
+	sudo systemctl start tomcat
 	
 	if [[ $? = 0 ]]
 	then
@@ -116,7 +116,7 @@ StartSOLR() {
         else
            
            printf "\nStarting solr6... \n"
-    	   sudo systemctl start solr.service
+    	   sudo systemctl start solr
 	   if [[ $? = 0 ]]
 	   then
 	     echo "solr6 service started successfully."

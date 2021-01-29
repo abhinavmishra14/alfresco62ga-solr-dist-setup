@@ -8,10 +8,10 @@
 printf "\n------------------------------ Stopping services ------------------------- \n"
 
 
-#User can pass ALF_HOME path. Defaults to "/opt/alfresco-community62ga".
-export ALF_HOME=${1:-"/opt/alfresco-community62ga"}
-#User can pass SOLR_HOME path. Defaults to "/opt/alfresco-search-services".
-export SOLR_HOME=${2:-"/opt/alfresco-search-services"}
+#User can pass ALF_HOME path. Defaults to "/usr/local/alfresco-community62ga".
+export ALF_HOME=${1:-"/usr/local/alfresco-community62ga"}
+#User can pass SOLR_HOME path. Defaults to "/usr/local/alfresco-search-services".
+export SOLR_HOME=${2:-"/usr/local/alfresco-search-services"}
 
 export CATALINA_HOME=$ALF_HOME/tomcat
 export CATALINA_TMPDIR=$CATALINA_HOME/temp
@@ -54,7 +54,7 @@ echo "---------------------------------------------"
 
 StopACS() {
         printf "\nShutting down Alfresco Tomcat... \n"
-	sudo systemctl stop tomcat.service
+	sudo systemctl stop tomcat
 	
 	if [[ $? = 0 ]]
 	then
@@ -82,7 +82,7 @@ StopDB() {
 StopSOLR() {
 
 	printf "\nShutting down solr6... \n"
-	sudo systemctl stop solr.service
+	sudo systemctl stop solr
 	
 	if [[ $? = 0 ]]
 	then
