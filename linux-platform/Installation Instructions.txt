@@ -1493,7 +1493,7 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
       $ sudo vim /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml 
 
-      <config evaluator="string-compare" condition="Users">
+      <config evaluator="string-compare" condition="Users" replace="true">
         <users>
             <!-- minimum length for username and password -->
             <username-min-length>2</username-min-length>
@@ -1511,11 +1511,121 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 ################################# Fix known user searchissue with share [End] ##########################################
 
 
+################################# ACS files/folder permissions [Start] #################################################
+
+
+Permisions at '/usr/local/alfresco-community62ga' directory level:
+
+drwxr-xr-x. 11 root Alfresco  222 Jan 25 19:55 activemq
+drwxrwxr-x.  5 root Alfresco   88 Jan 28 19:48 alf_data
+drwxr-xr-x.  2 root Alfresco   53 Jan 26 16:23 alfresco-pdf-renderer
+drwxr-xr-x.  2 root Alfresco  140 Jan 26 16:48 amps
+drwxr-xr-x.  2 root Alfresco  107 Jan 21 12:45 amps_share
+drwxr-xr-x.  2 root Alfresco   92 Jan 28 20:03 bin
+drwxr-xr-x.  2 root Alfresco   84 Jan 26 18:05 imagemagick
+drwxr-xr-x.  2 root Alfresco  163 Jan 26 18:11 libreoffice
+drwxr-xr-x.  3 root Alfresco   78 Jan 26 17:28 licenses
+drwxr-xr-x.  4 root Alfresco   53 Jan 21 12:45 modules
+-rwxr-xr-x.  1 root Alfresco 3839 Jan 29 17:27 start.sh
+-rwxr-xr-x.  1 root Alfresco 2428 Jan 29 17:28 stop.sh
+drwxr-xr-x. 10 root Alfresco  252 Jan 25 20:12 tomcat
+
+
+Permisions at '/usr/local/alfresco-community62ga/tomcat' directory level:
+
+drwxr-xr-x. 2 root Alfresco  4096 Jan 25 20:11 bin
+-rw-r--r--. 1 root Alfresco 19318 Jan 25 20:11 BUILDING.txt
+drwxr-xr-x. 3 root Alfresco   254 Jan 29 18:53 conf
+-rw-r--r--. 1 root Alfresco  5408 Jan 25 20:11 CONTRIBUTING.md
+drwxr-xr-x. 2 root Alfresco  4096 Jan 25 20:12 lib
+-rw-r--r--. 1 root Alfresco 57011 Jan 25 20:11 LICENSE
+drwxrwxr-x. 2 root Alfresco   197 Jan 29 17:06 logs
+-rw-r--r--. 1 root Alfresco  1726 Jan 25 20:11 NOTICE
+-rw-r--r--. 1 root Alfresco  3257 Jan 25 20:11 README.md
+-rw-r--r--. 1 root Alfresco   193 Jan 25 20:12 Readme.txt
+-rw-r--r--. 1 root Alfresco  7136 Jan 25 20:11 RELEASE-NOTES
+-rw-r--r--. 1 root Alfresco 16507 Jan 25 20:11 RUNNING.txt
+drwxr-xr-x. 4 root Alfresco    32 Jan 25 20:12 shared
+drwxrwxr-x. 5 root Alfresco   165 Jan 29 18:43 temp
+drwxrwxr-x. 6 root Alfresco   136 Jan 29 16:12 webapps
+drwxrwxr-x. 3 root Alfresco    22 Jan 25 20:56 work
+
+
+Permisions at '/usr/local/alfresco-community62ga/tomcat/logs' directory level:
+
+-rw-r-----. 1 alfresco Alfresco 3476532 Jan 29 18:43 catalina.2021-01-29.log
+-rwxrwxr-x. 1 alfresco Alfresco 1475688 Jan 29 18:43 catalina.out
+-rw-r-----. 1 alfresco Alfresco       0 Jan 29 17:06 host-manager.2021-01-29.log
+-rw-r-----. 1 alfresco Alfresco    7187 Jan 29 18:43 localhost.2021-01-29.log
+-rw-r-----. 1 alfresco Alfresco 2470863 Jan 29 18:58 localhost_access_log.2021-01-29.txt
+-rw-r-----. 1 alfresco Alfresco       0 Jan 29 17:06 manager.2021-01-29.log
+
+
+Permisions at '/usr/local/alfresco-community62ga/tomcat/temp' directory level:
+
+drwxr-x---. 4 alfresco Alfresco 12288 Jan 29 18:43 Alfresco
+drwxr-x---. 2 alfresco Alfresco     6 Jan 28 19:48 Alfresco-WebScripts
+-rwxrwxr-x. 1 alfresco Alfresco     0 Jan 25 20:11 safeToDelete.tmp
+-rw-r-----. 1 alfresco Alfresco     5 Jan 29 18:42 tomcat.pid
+
+
+Permisions at '/usr/local/alfresco-community62ga/tomcat/webapps' directory level:
+
+drwxr-x---. 11 alfresco Alfresco       209 Jan 29 16:11 alfresco
+-rwxrwxr-x.  1 alfresco Alfresco 191675102 Jan 28 20:03 alfresco.war
+drwxr-x---.  6 alfresco Alfresco       119 Jan 28 19:49 ROOT
+-rwxrwxr-x.  1 alfresco Alfresco    275031 Jan 28 14:28 ROOT.war
+drwxr-x---. 16 alfresco Alfresco      4096 Jan 29 16:12 share
+-rwxrwxr-x.  1 alfresco Alfresco  76888634 Jan 28 20:03 share.war
+drwxr-x---.  4 alfresco Alfresco        54 Jan 28 19:49 _vti_bin
+-rwxrwxr-x.  1 alfresco Alfresco    762845 Jan 28 14:28 _vti_bin.war
+
+
+Permisions at '/usr/local/alfresco-community62ga/tomcat/work' directory level:
+
+drwxr-x---. 3 alfresco Alfresco 23 Jan 25 20:56 Catalina
+
+################################# ACS files/folder permissions [End] ###################################################
+
+
+################################# ACS files/folder permissions [Start] #################################################
+
+Permisions at '/usr/local/alfresco-search-services' directory level:
+
+drwxr-xr-x. 3 solr solr   23 Jan 29 17:13 contentstore
+drwxr-xr-x. 4 solr Solr   72 Jan 29 16:21 licenses
+drwxrwxr-x. 3 solr Solr 4096 Jan 29 18:42 logs
+-rwxr-xr-x. 1 solr Solr 1328 Jan 29 16:21 README.MD
+drwxr-xr-x. 6 solr Solr  159 Jan 29 16:21 solr
+drwxrwxr-x. 7 solr Solr  104 Jan 29 17:13 solrhome
+-rwxr-xr-x. 1 solr Solr 6764 Jan 29 16:21 solr.in.cmd
+-rwxr-xr-x. 1 solr Solr 7520 Jan 29 16:40 solr.in.sh
+
+
+Permisions at '/usr/local/alfresco-search-services/logs' directory level:
+
+drwxr-xr-x. 2 solr Solr    54 Jan 29 18:42 archived
+-rwxr-xr-x. 1 solr Solr  1770 Jan 29 16:21 log4j.properties
+-rwxr-xr-x. 1 solr Solr   245 Jan 29 16:21 README.txt
+-rw-r--r--. 1 solr Solr  1359 Jan 29 18:42 solr-8983-console.log
+-rw-r--r--. 1 solr Solr  4130 Jan 29 18:45 solr_gc.log
+-rw-r--r--. 1 solr Solr  2882 Jan 29 18:42 solr.log
+-rw-r--r--. 1 solr Solr 30629 Jan 29 18:42 solr.log.1
+-rw-r--r--. 1 solr Solr  4871 Jan 29 18:29 solr.log.2
+
+
+Permisions at '/usr/local/alfresco-search-services/solrhome' directory level:
+
+drwxr-xr-x. 5 solr solr   79 Jan 29 17:13 alfresco
+drwxrwxr-x. 2 solr Solr 4096 Jan 29 17:13 alfrescoModels
+drwxr-xr-x. 5 solr solr   79 Jan 29 17:13 archive
+drwxrwxr-x. 2 solr Solr   93 Jan 29 16:35 conf
+-rwxrwxr-x. 1 solr Solr  151 Jan 29 16:21 solr.xml
+drwxrwxr-x. 4 solr Solr   36 Jan 29 16:21 templates
 
 
 
-
-
+################################# ASS files/folder permissions [End] ###################################################
 
 
 
