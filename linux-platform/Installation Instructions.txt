@@ -79,6 +79,7 @@
 		├── imagemagick
 		├── libreoffice
 		├── licenses
+                ├── logs
 		├── modules
 		│   ├── platform
 		│   └── share
@@ -94,6 +95,8 @@
      $ sudo chmod -R 755 /usr/local/alfresco-community62ga
 
      $ sudo chmod -R 775 /usr/local/alfresco-community62ga/alf_data
+ 
+     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/logs
 
      # We will be setting up some more permissions when we setup tomcat.
 
