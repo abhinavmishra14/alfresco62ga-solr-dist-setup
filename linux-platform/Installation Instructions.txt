@@ -1474,7 +1474,7 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
 ################################# Fix known user searchissue with share [Start] ########################################
 
-  # There is a known issue with share where user search doesn't work. For more details visit: https://github.com/Alfresco/acs-community-packaging/issues/36
+  # There is a known issue with share where user search doesn't work. For more details visit: https://github.com/Alfresco/acs-community-packaging/issues/367
 
   # To fix the issue we have to update /usr/local/alfresco-community62ga/tomcat/shared/classes/alfresco/web-extension
 /share-config-custom.xml
@@ -1498,7 +1498,7 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
             <!-- minimum length for username and password -->
             <username-min-length>2</username-min-length>
             <password-min-length>3</password-min-length>
-            <!-- Default value is 'true', setting it to 'false' to fix the user search issue.
+            <!-- Default value is 'true', setting it to 'false' to fix the user search issue. -->
             <show-authorization-status>false</show-authorization-status>
         </users>
         <!-- This enables/disables the Add External Users Panel on the Add Users page. -->

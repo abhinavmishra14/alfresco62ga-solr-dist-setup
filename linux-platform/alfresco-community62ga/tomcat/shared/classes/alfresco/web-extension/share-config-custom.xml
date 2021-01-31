@@ -1,5 +1,18 @@
 <alfresco-config>
 
+   <config evaluator="string-compare" condition="Users" replace="true">
+        <users>
+            <!-- minimum length for username and password -->
+            <username-min-length>2</username-min-length>
+            <password-min-length>3</password-min-length>
+            <!-- Default value is 'true', setting it to 'false' to fix the user search issue. 
+			 https://github.com/Alfresco/acs-community-packaging/issues/367-->
+            <show-authorization-status>false</show-authorization-status>
+        </users>
+        <!-- This enables/disables the Add External Users Panel on the Add Users page. -->
+        <enable-external-users-panel>false</enable-external-users-panel>
+   </config>
+ 
    <!-- Global config section -->
    <config replace="true">
       <flags>
