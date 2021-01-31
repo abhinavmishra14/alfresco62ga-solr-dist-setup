@@ -79,7 +79,6 @@
 		├── imagemagick
 		├── libreoffice
 		├── licenses
-                ├── logs
 		├── modules
 		│   ├── platform
 		│   └── share
@@ -91,8 +90,8 @@
    # Set initial permissions to structure created above:
 
      $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga
-     
-     $ sudo chmod -R 755 /usr/local/alfresco-community62ga
+    
+     $ sudo chmod 775 /usr/local/alfresco-community62ga
 
      $ sudo chmod -R 775 /usr/local/alfresco-community62ga/alf_data
  
@@ -135,8 +134,10 @@
     # Set initial permissions to structure created folder:
 
      $ sudo chgrp -R Solr /usr/local/alfresco-search-services
+   
+     $ sudo chmod 775 /usr/local/alfresco-search-services
      
-     $ sudo chmod -R 755 /usr/local/alfresco-search-services
+     $ sudo chmod -R 755 /usr/local/alfresco-search-services/*
      
      # We will be setting up some more permissions when we setup solr.
 
@@ -644,9 +645,7 @@ Note that activemq may not be used at this time as we will be setting up with le
 
   # Update permissions:
 
-     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga/tomcat
-     
-     $ sudo chmod -R 644 /usr/local/alfresco-community62ga/tomcat/*
+     $ sudo chgrp -R Alfresco /usr/local/alfresco-community62ga
      
      $ sudo chmod -R 755 /usr/local/alfresco-community62ga/tomcat/bin
      
@@ -1475,7 +1474,7 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 ################################# Setup alfresco-search-services [End] #################################################
 
 
-################################# Fix known user searchissue with share [Start] ########################################
+################################# Fix known user search issue with share [Start] ########################################
 
   # There is a known issue with share where user search doesn't work. For more details visit: https://github.com/Alfresco/acs-community-packaging/issues/367
 
@@ -1511,10 +1510,10 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
     # You can find the above config here : https://github.com/Alfresco/share/blob/develop/share/src/main/resources/alfresco/share-config.xml#L127
 
-################################# Fix known user searchissue with share [End] ##########################################
+################################# Fix known user search issue with share [End] ##########################################
 
 
-################################# ACS files/folder permissions [Start] #################################################
+################################# ACS files/folder permissions [Start] ##################################################
 
 
 Permisions at '/usr/local/alfresco-community62ga' directory level:
@@ -1575,18 +1574,18 @@ drwxr-x---. 2 alfresco Alfresco     6 Jan 28 19:48 Alfresco-WebScripts
 Permisions at '/usr/local/alfresco-community62ga/tomcat/webapps' directory level:
 
 drwxr-x---. 11 alfresco Alfresco       209 Jan 29 16:11 alfresco
--rwxrwxr-x.  1 alfresco Alfresco 191675102 Jan 28 20:03 alfresco.war
+-rwxrwxr-x.  1 root Alfresco 191675102 Jan 28 20:03 alfresco.war
 drwxr-x---.  6 alfresco Alfresco       119 Jan 28 19:49 ROOT
--rwxrwxr-x.  1 alfresco Alfresco    275031 Jan 28 14:28 ROOT.war
+-rwxrwxr-x.  1 root Alfresco    275031 Jan 28 14:28 ROOT.war
 drwxr-x---. 16 alfresco Alfresco      4096 Jan 29 16:12 share
--rwxrwxr-x.  1 alfresco Alfresco  76888634 Jan 28 20:03 share.war
+-rwxrwxr-x.  1 root Alfresco  76888634 Jan 28 20:03 share.war
 drwxr-x---.  4 alfresco Alfresco        54 Jan 28 19:49 _vti_bin
--rwxrwxr-x.  1 alfresco Alfresco    762845 Jan 28 14:28 _vti_bin.war
+-rwxrwxr-x.  1 root Alfresco    762845 Jan 28 14:28 _vti_bin.war
 
 
 Permisions at '/usr/local/alfresco-community62ga/tomcat/work' directory level:
 
-drwxr-x---. 3 alfresco Alfresco 23 Jan 25 20:56 Catalina
+drwxrwxr-x. 3 root Alfresco 23 Jan 25 20:56 Catalina
 
 ################################# ACS files/folder permissions [End] ###################################################
 
