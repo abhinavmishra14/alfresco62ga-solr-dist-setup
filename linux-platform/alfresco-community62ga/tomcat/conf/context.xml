@@ -27,8 +27,8 @@
     <!--
     <Manager pathname="" />
     -->
-	
-	<!-- 
+    
+   <!-- 
         If you see error like this in log, then either increase the resource caching or disable it.
 
 	org.apache.catalina.webresources.Cache.getResource Unable to add the resource at [/WEB-INF/classes/alfresco/templates/org/alfresco/dashboard.ftl] to the cache for web application [/share] because there was insufficient free space available after evicting expired cache entries - consider increasing the maximum size of the cache
@@ -38,6 +38,6 @@
 
 	Or disable it: <Resources cachingAllowed="false" />
    -->
-	
-	<Resources cachingAllowed="false" />
+
+   <Resources cachingAllowed="false" />
 </Context>

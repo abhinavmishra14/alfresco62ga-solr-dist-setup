@@ -12,7 +12,7 @@
         <!-- This enables/disables the Add External Users Panel on the Add Users page. -->
         <enable-external-users-panel>false</enable-external-users-panel>
    </config>
-
+ 
    <!-- Global config section -->
    <config replace="true">
       <flags>
