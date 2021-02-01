@@ -95,8 +95,6 @@
 
      $ sudo chmod -R 775 /usr/local/alfresco-community62ga/alf_data
  
-     $ sudo chmod -R 775 /usr/local/alfresco-community62ga/logs
-
      # We will be setting up some more permissions when we setup tomcat.
 
    # Add ALF_HOME to permanent environment variable
@@ -176,7 +174,7 @@
 		$ sudo yum update -y
                 $ sudo reboot
 
-	# Install latest stable version of Java11
+	# Install latest stable version of Java-11
 		$ sudo yum install java-11-openjdk-devel
 
 	This will install java11 in following directory: /usr/lib/jvm/java-11
@@ -192,6 +190,8 @@
             Revalidate the java version using below command to make sure default version is set to java-11:
             
             $ java -version
+			
+			
 
 	# set JAVA_HOME environment variable.
 		export JAVA_HOME=/usr/lib/jvm/java-11
