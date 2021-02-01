@@ -224,7 +224,7 @@
 
 ################################# Installing Java 11 [End] #################################################################
 
-################################# Installing Postgres 11.10 [Start] ########################################################
+################################# Installing PostgreSQL 11.10 [Start] ########################################################
 
    # Update packages, its a best practice to start with an updated operating system before installing a package. 
    # If you have not done so, use the following command to update CentOS and reboot:
