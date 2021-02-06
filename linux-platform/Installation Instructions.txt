@@ -336,27 +336,27 @@ Note: Make sure port 5432 is open and not already in use. Port 5432 is default f
       # Edit the Apache configuration file to add a VirtualHost as appears below:
 
         <VirtualHost *:80>
-	ServerName pgadmin.alfresco.com
-	LoadModule wsgi_module modules/pgadmin4-python3-mod_wsgi.so
-	WSGIDaemonProcess pgadmin processes=1 threads=25
-	WSGIScriptAlias /pgadmin4 /usr/lib/python3.6/site-packages/pgadmin4-web/pgAdmin4.wsgi
+		LoadModule wsgi_module modules/pgadmin4-python3-mod_wsgi.so
+		WSGIDaemonProcess pgadmin processes=1 threads=25
+		WSGIScriptAlias /pgadmin4 /usr/lib/python3.6/site-packages/pgadmin4-web/pgAdmin4.wsgi
 
-	<Directory /usr/lib/python3.6/site-packages/pgadmin4-web/>
-		WSGIProcessGroup pgadmin
-		WSGIApplicationGroup %{GLOBAL}
-		<IfModule mod_authz_core.c>
-		        # Apache 2.4
-		        Require all granted
-		</IfModule>
-		<IfModule !mod_authz_core.c>
-		        # Apache 2.2
-		        Order Deny,Allow
-		        Deny from All
-		        Allow from 127.0.0.1
-		        Allow from ::1
-		</IfModule>
-	</Directory>
-	</VirtualHost>
+		<Directory /usr/lib/python3.6/site-packages/pgadmin4-web/>
+			WSGIProcessGroup pgadmin
+			WSGIApplicationGroup %{GLOBAL}
+			<IfModule mod_authz_core.c>
+				# Apache 2.4
+				Require all granted
+			</IfModule>
+			<IfModule !mod_authz_core.c>
+				# Apache 2.2
+				Order Deny,Allow
+				Deny from All
+				Allow from 127.0.0.1
+				Allow from ::1
+			</IfModule>
+		</Directory>
+		</VirtualHost>
+
 
        # Confirm the above edit and syntax are ok and then restart httpd:
          
@@ -432,14 +432,19 @@ SELinux gives that extra layer of security to the resources in the system. It pr
       http://localhost:80/pgadmin4/login?next=%2Fpgadmin4%2F
 
 
- # In case you are not able to connect from pgAdmin due to SELinux preventing the connection, then exeucte following commands and restart postgresql11
+ # In case you are not able to connect from pgAdmin due to SELinux preventing the connection, then execute following commands and restart postgresql-11
         $ sudo semanage port -a -t postgresql_port_t -p tcp 5432
         $ sudo setsebool -P httpd_can_network_connect_db 1
 
  
- # At last, prepare alfresco database, create user and assign previlidges
+ # At last, prepare alfresco database, create user and assign privileges
        
-        $ sudo su - postgres
+	    - Create a new user named "alfresco" and set a password which will be used by alfresco content service to connect to database. Here we will be using username as "alfresco" and password "alfresco".
+		- Create a new database named : "alfresco", make sure you select default encoding which is "utf8".
+		- Grant all permissions for user "alfresco" on database "alfresco".
+		- Alternatively, you can open the query tool and execute following SQL queries:
+        
+		$ sudo su - postgres
 	
         # type psql to launch postgresql terminal
         -bash-4.2$ psql
@@ -492,7 +497,7 @@ SELinux gives that extra layer of security to the resources in the system. It pr
    
      /usr/lib64/ImageMagick-7.0.10
 
-   # Imagemagic configuration based on above locations for alfresco would be:
+   # Imagemagick configuration based on above locations for alfresco would be:
 
         img.root=/usr/lib64/ImageMagick-7.0.10
 	img.dyn=/usr/bin
@@ -501,8 +506,9 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 	img.config=${img.root}/config-Q16HDRI
 	img.coders=${img.root}/modules-Q16HDRI/coders
 
+  # Note: For our convenience we will be creating 'links' to executable and libraries at later stage to keep everything in one place. We have a imagemagick folder within '/usr/local/alfresco-community62ga/' directory when we created the initial structure for setup. You can choose to keep executables and library at default location (as shown above) and use the above given properties in alfresco-global.properties as is. It is up to you.
 
-  # Now that we have installed the imagemagic, let's do a round of test to make sure execuatables are working as expected
+  # Now that we have installed the imagemagick, let's do a round of test to make sure executables are working as expected
 
     # Post installation use this command to make sure imagemagic's 'covert' command is working: 
       
@@ -512,7 +518,7 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 ################################# Installing Imagemagick 7.0.10 [End] #########################################################################
 
 
-################################# Installing Imagemagick LibreOffice_6.3.5.x [Start] ##########################################################
+################################# Installing LibreOffice_6.3.5.x [Start] ##########################################################
 
     # Download locations:
    
@@ -540,7 +546,7 @@ SELinux gives that extra layer of security to the resources in the system. It pr
 	jodconverter.portNumbers=8100
 
 
-################################# Installing Imagemagick LibreOffice_6.3.5.x [End] ##########################################################
+################################# Installing LibreOffice_6.3.5.x [End] ##########################################################
 
 
 ################################# Installing ActiveMQ 5.15.8 [Start] ########################################################################
@@ -550,7 +556,7 @@ SELinux gives that extra layer of security to the resources in the system. It pr
     https://archive.apache.org/dist/activemq/5.15.8/apache-activemq-5.15.8-bin.tar.gz
 
  # (We created the directory structure in first step)
- # Extract the package and copy content of apache-activemq-5.15.8-bin into '/usr/local/alfresco-community62ga/activemq'
+ # Extract the package and copy content of apache-activemq-5.15.8-bin into '/usr/local/alfresco-community62ga/activemq/'
 
 Note: Make sure ports 61616, 5672, 61613, 1883, 61614 and 8161 are open and not in use already. These are default ports used for activemq. If you have these ports already in use, make sure you change the ports accordingly in <AMQ_INSTALLATION>/conf/activemq.xml and jetty.xml as needed.
 Note that activemq may not be used at this time as we will be setting up with legacy transformation service but keeping the message broker setup ready for future use in case you would like to setup transformation service. However, we will see all the steps to setup and use the activemq below, If you do these steps and not using activeMq, then disable the service and ports. Enable them back when you are ready to use transformation services.
@@ -562,7 +568,7 @@ Note that activemq may not be used at this time as we will be setting up with le
    
    # Put the below instructions in activemq.service and save
 
-        [Unit]
+    [Unit]
 	Description=ActiveMQ service
 	After=network.target
 
@@ -629,20 +635,21 @@ Note that activemq may not be used at this time as we will be setting up with le
 
     # Try the webconsole again, this should work this time hopefully:
       http://localhost:8161/admin
+	  # Default user name and password is : admin/admin
     
   # Now that everything setup and working, i will disable the service and disable the ports i opened above as for this setup i am not using transformation services.
 
 ################################# Installing ActiveMQ 5.15.8 [End] ############################################################
 
 
-################################# Installing Tomcat 8.5.61 [Start] ############################################################
+################################# Installing Tomcat 8.5.43 [Start] ############################################################
 
   # Download locations:
   
-    https://mirrors.gigenet.com/apache/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.tar.gz
+    https://mirrors.gigenet.com/apache/tomcat/tomcat-8/v8.5.43/bin/apache-tomcat-8.5.43.tar.gz
 
   # (We created the directory structure in first step)
-  # Extract the package and copy content of apache-tomcat-8.5.61 into '/usr/local/alfresco-community62ga/tomcat'
+  # Extract the package and copy content of apache-tomcat-8.5.43 into '/usr/local/alfresco-community62ga/tomcat'
 
   # Note: Make sure ports 8005, 8080, 8443, AJP port 8009 are open and not in use already. These are default ports used for tomcat. If you have these ports already in use, make sure you change the ports accordingly in <TOMCAT_INSTALLATION>/conf/server.xml.
 
@@ -722,7 +729,7 @@ Note that activemq may not be used at this time as we will be setting up with le
    $ sudo firewall-cmd --zone=public --permanent --add-port=8443/tcp
    $ sudo firewall-cmd --reload
 
-################################# Installing Tomcat 8.5.61 [End] ##############################################################
+################################# Installing Tomcat 8.5.43 [End] ##############################################################
 
 
 ################################# Setup acs62-ga [Start] ######################################################################
@@ -811,7 +818,7 @@ Note: This amp installation is mandatory otherwise several functionalities inclu
 
         alfresco-mmt.jar -> Alfresco Module Management Tool (MMT), A java library which supports alfresco module package installation/uninstallation/listing and preview operations etc.
         apply_amps.sh -> Utility to install amps kept in “amps” and “amps_share” directory. It will install amps related to alfresco on alfresco.war (keeps the backup of original war file) and amps related to share on share.war (keeps the backup of original war file) For more details visit: https://docs.alfresco.com/community/tasks/amp-install.html
-        clean_tomcat.sh -> Windows batch file for cleaning out temporary application server files from previous installations.
+        clean_tomcat.sh -> Shell script for cleaning out temporary application server files from previous installations.
    
         $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/bin/alfresco-mmt.jar /usr/local/alfresco-community62ga/bin/
         $ sudo cp /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/bin/apply_amps.sh /usr/local/alfresco-community62ga/bin/
@@ -887,9 +894,9 @@ Note: This amp installation is mandatory otherwise several functionalities inclu
 
   #----------------------------------------------------  alfresco-community62ga/tomcat [Start] -------------------------------------------------------------------------------#
 
-    # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/conf” into “/usr/local/alfresco-community62ga/tomcat/conf” folder. conf directory contains Catalina repository and Share xml files.
+    # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/conf” into “/usr/local/alfresco-community62ga/tomcat/conf/” folder. conf directory contains Catalina repository and Share xml files.
    
-    $ sudo cp -R /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/conf /usr/local/alfresco-community62ga/tomcat/conf
+    $ sudo cp -R /home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/conf /usr/local/alfresco-community62ga/tomcat/conf/
 
     # Copy the contents from “/home/centos/Downloads/alfresco-content-services-community-distribution-6.2.0-ga/web-server/lib/” into “/usr/local/alfresco-community62ga/tomcat/lib/” folder. 'lib' directory contains the PostgreSQL JDBC jar file (postgresql-42.2.6.jar).
    
@@ -1414,7 +1421,7 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 
 			./solr/bin/solr stop -all
 		
-		# Configure solr log, The logs are stored in the /usr/local/alfresco-search-services/logs/solr.log file, by default. This can be configured in solr.in.cmd using SOLR_LOGS_DIR. This is optional setup. We are keeping default settings
+		# Configure solr log, The logs are stored in the /usr/local/alfresco-search-services/logs/solr.log file, by default. This can be configured in solr.in.sh using SOLR_LOGS_DIR. This is optional setup. We are keeping default settings
 		
 		SOLR_LOGS_DIR=../../logs
 		LOG4J_PROPS=$SOLR_LOGS_DIR/log4j.properties
@@ -1426,24 +1433,25 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
       # Put the below instructions in solr.service and save
 
         # Systemd unit file for solr6
-	[Unit]
-	Description=Alfresco search service
-	After=syslog.target network.target
+		[Unit]
+		Description=Alfresco search service
+		After=syslog.target network.target
 
-	[Service]
-	Type=forking
-	Restart=always
+		[Service]
+		Type=forking
+		Restart=always
 
-	Environment=JAVA_HOME=/usr/lib/jvm/jre
+		Environment=JAVA_HOME=/usr/lib/jvm/jre
 
-	ExecStart=/usr/local/alfresco-search-services/solr/bin/solr start
-	ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
+		ExecStart=/usr/local/alfresco-search-services/solr/bin/solr start
+		ExecStop=/usr/local/alfresco-search-services/solr/bin/solr stop -all
+		#WorkingDirectory=~/usr/local/alfresco-search-services/solrhome
 
-	User=solr
-	Group=Solr
+		User=solr
+		Group=Solr
 
-	[Install]
-	WantedBy=multi-user.target
+		[Install]
+		WantedBy=multi-user.target
 
 
       # Reload demons
@@ -1519,7 +1527,7 @@ https://repo1.maven.org/maven2/org/orderofthebee/support-tools/support-tools-rep
 ################################# ACS files/folder permissions [Start] ##################################################
 
 
-Permisions at '/usr/local/alfresco-community62ga' directory level:
+Permissions at '/usr/local/alfresco-community62ga' directory level:
 
 drwxr-xr-x. 11 root Alfresco  222 Jan 25 19:55 activemq
 drwxrwxr-x.  5 root Alfresco   88 Jan 28 19:48 alf_data
@@ -1536,7 +1544,7 @@ drwxr-xr-x.  4 root Alfresco   53 Jan 21 12:45 modules
 drwxr-xr-x. 10 root Alfresco  252 Jan 25 20:12 tomcat
 
 
-Permisions at '/usr/local/alfresco-community62ga/tomcat' directory level:
+Permissions at '/usr/local/alfresco-community62ga/tomcat' directory level:
 
 drwxr-xr-x. 2 root Alfresco  4096 Jan 25 20:11 bin
 -rw-r--r--. 1 root Alfresco 19318 Jan 25 20:11 BUILDING.txt
@@ -1556,7 +1564,7 @@ drwxrwxr-x. 6 root Alfresco   136 Jan 29 16:12 webapps
 drwxrwxr-x. 3 root Alfresco    22 Jan 25 20:56 work
 
 
-Permisions at '/usr/local/alfresco-community62ga/tomcat/logs' directory level:
+Permissions at '/usr/local/alfresco-community62ga/tomcat/logs' directory level:
 
 -rw-r-----. 1 alfresco Alfresco 3476532 Jan 29 18:43 catalina.2021-01-29.log
 -rwxrwxr-x. 1 alfresco Alfresco 1475688 Jan 29 18:43 catalina.out
@@ -1566,7 +1574,7 @@ Permisions at '/usr/local/alfresco-community62ga/tomcat/logs' directory level:
 -rw-r-----. 1 alfresco Alfresco       0 Jan 29 17:06 manager.2021-01-29.log
 
 
-Permisions at '/usr/local/alfresco-community62ga/tomcat/temp' directory level:
+Permissions at '/usr/local/alfresco-community62ga/tomcat/temp' directory level:
 
 drwxr-x---. 4 alfresco Alfresco 12288 Jan 29 18:43 Alfresco
 drwxr-x---. 2 alfresco Alfresco     6 Jan 28 19:48 Alfresco-WebScripts
@@ -1574,7 +1582,7 @@ drwxr-x---. 2 alfresco Alfresco     6 Jan 28 19:48 Alfresco-WebScripts
 -rw-r-----. 1 alfresco Alfresco     5 Jan 29 18:42 tomcat.pid
 
 
-Permisions at '/usr/local/alfresco-community62ga/tomcat/webapps' directory level:
+Permissions at '/usr/local/alfresco-community62ga/tomcat/webapps' directory level:
 
 drwxr-x---. 11 alfresco Alfresco       209 Jan 29 16:11 alfresco
 -rwxrwxr-x.  1 root Alfresco 191675102 Jan 28 20:03 alfresco.war
@@ -1586,7 +1594,7 @@ drwxr-x---.  4 alfresco Alfresco        54 Jan 28 19:49 _vti_bin
 -rwxrwxr-x.  1 root Alfresco    762845 Jan 28 14:28 _vti_bin.war
 
 
-Permisions at '/usr/local/alfresco-community62ga/tomcat/work' directory level:
+Permissions at '/usr/local/alfresco-community62ga/tomcat/work' directory level:
 
 drwxrwxr-x. 3 root Alfresco 23 Jan 25 20:56 Catalina
 
@@ -1595,7 +1603,7 @@ drwxrwxr-x. 3 root Alfresco 23 Jan 25 20:56 Catalina
 
 ################################# ACS files/folder permissions [Start] #################################################
 
-Permisions at '/usr/local/alfresco-search-services' directory level:
+Permissions at '/usr/local/alfresco-search-services' directory level:
 
 drwxr-xr-x. 3 solr solr   23 Jan 29 17:13 contentstore
 drwxr-xr-x. 4 solr Solr   72 Jan 29 16:21 licenses
@@ -1607,7 +1615,7 @@ drwxrwxr-x. 7 solr Solr  104 Jan 29 17:13 solrhome
 -rwxr-xr-x. 1 solr Solr 7520 Jan 29 16:40 solr.in.sh
 
 
-Permisions at '/usr/local/alfresco-search-services/logs' directory level:
+Permissions at '/usr/local/alfresco-search-services/logs' directory level:
 
 drwxr-xr-x. 2 solr Solr    54 Jan 29 18:42 archived
 -rwxr-xr-x. 1 solr Solr  1770 Jan 29 16:21 log4j.properties
@@ -1619,7 +1627,7 @@ drwxr-xr-x. 2 solr Solr    54 Jan 29 18:42 archived
 -rw-r--r--. 1 solr Solr  4871 Jan 29 18:29 solr.log.2
 
 
-Permisions at '/usr/local/alfresco-search-services/solrhome' directory level:
+Permissions at '/usr/local/alfresco-search-services/solrhome' directory level:
 
 drwxr-xr-x. 5 solr solr   79 Jan 29 17:13 alfresco
 drwxrwxr-x. 2 solr Solr 4096 Jan 29 17:13 alfrescoModels
