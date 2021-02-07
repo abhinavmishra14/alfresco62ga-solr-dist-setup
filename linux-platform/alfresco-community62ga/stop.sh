@@ -17,7 +17,7 @@ export CATALINA_HOME=$ALF_HOME/tomcat
 export CATALINA_TMPDIR=$CATALINA_HOME/temp
 export JRE_HOME=$JAVA_HOME
 
-# Check if JRE_HOME is set in path varible or not, else set default path. It is mandatory for acs to start
+# Check if JRE_HOME is set in path variable or not, else set default path. It is mandatory for acs to start
 if [ -z "$JRE_HOME" ]
 then
   echo "JRE_HOME could not be found, setting the default..." 
@@ -27,14 +27,14 @@ fi
 #Export JRE_HOME to PATH
 export PATH=$PATH:$JRE_HOME/bin
 
-# Check if ALF_HOME is set in path varible or not, we may need it for executing shell scripts as needed.
+# Check if ALF_HOME is set in path variable or not, we may need it for executing shell scripts as needed.
 if [[ "$PATH" == *"$ALF_HOME"* ]]; then
   echo "$ALF_HOME already set in PATH variable."
 else 
   export PATH=$PATH:$ALF_HOME
 fi
 
-# Check if SOLR_HOME is set in path varible or not, we may need it for executing shell scripts as needed.
+# Check if SOLR_HOME is set in path variable or not, we may need it for executing shell scripts as needed.
 if [[ "$PATH" == *"$SOLR_HOME"* ]]; then
   echo "$SOLR_HOME already set in PATH variable."
 else
@@ -67,7 +67,7 @@ StopACS() {
 
 StopDB() {
 
-	printf "\nShutting down Postgressql... \n"
+	printf "\nShutting down Postgresql... \n"
 	sudo systemctl stop postgresql-11.service
 	
 	if [[ $? = 0 ]]
