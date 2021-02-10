@@ -13,7 +13,7 @@ export ALF_HOME=${1:-"/usr/local/alfresco-community62ga"}
 #User can pass SOLR_HOME path. Defaults to "/usr/local/alfresco-search-services".
 export SOLR_HOME=${2:-"/usr/local/alfresco-search-services"}
 
-#Start pgAdmin4 ?, Default to 'true'
+#Stop pgAdmin4 ?, Default to 'true'
 STOP_PGADMIN=${3:-"true"}
 
 export CATALINA_HOME=$ALF_HOME/tomcat
