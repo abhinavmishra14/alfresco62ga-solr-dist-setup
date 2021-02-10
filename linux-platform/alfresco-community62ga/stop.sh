@@ -13,6 +13,9 @@ export ALF_HOME=${1:-"/usr/local/alfresco-community62ga"}
 #User can pass SOLR_HOME path. Defaults to "/usr/local/alfresco-search-services".
 export SOLR_HOME=${2:-"/usr/local/alfresco-search-services"}
 
+#Start pgAdmin4 ?, Default to 'true'
+STOP_PGADMIN=${3:-"true"}
+
 export CATALINA_HOME=$ALF_HOME/tomcat
 export CATALINA_TMPDIR=$CATALINA_HOME/temp
 export JRE_HOME=$JAVA_HOME
@@ -76,6 +79,18 @@ StopDB() {
 	else
 	   echo "Failed to stop postgresql-11.service!"
 	   exit 1
+       fi
+
+       if [[ $STOP_PGADMIN == true ]]; then
+            # Stop pgAdmin4 as well
+	    sudo systemctl stop httpd
+	    if [[ $? = 0 ]]
+	    then
+		echo "pgAdmin4 httpd service stopped successfully."
+	    else
+		echo "Failed to stop pgAdmin4 httpd service!"
+		exit 1
+	    fi
        fi
 }
 
