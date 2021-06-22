@@ -131,11 +131,9 @@
 
     # Set initial permissions to structure created folder:
 
-     $ sudo chgrp -R Solr /usr/local/alfresco-search-services
+     $ sudo chgrp Solr /usr/local/alfresco-search-services
    
      $ sudo chmod 775 /usr/local/alfresco-search-services
-     
-     $ sudo chmod -R 755 /usr/local/alfresco-search-services/*
      
      # We will be setting up some more permissions when we setup solr.
 
